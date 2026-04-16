@@ -1,8 +1,7 @@
 import { ImageResponse } from "next/og";
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import { getTier } from "@/lib/scoring";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
