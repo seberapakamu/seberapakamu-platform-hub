@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createServerClient } from "@/lib/supabase.server";
+import { createClient } from "@supabase/supabase-js";
 import { PublicNavbar, PublicFooter } from "@/components/PublicNav";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export async function generateStaticParams() {
   return [];
@@ -34,7 +39,6 @@ function stripHtml(html: string): string {
 
 async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
   try {
-    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("articles")
       .select("id, judul, slug, konten, gambar_url, updated_at")

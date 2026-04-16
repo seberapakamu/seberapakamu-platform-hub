@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { createServerClient } from "@/lib/supabase.server";
+import { createClient } from "@supabase/supabase-js";
 import { PublicNavbar, PublicFooter } from "@/components/PublicNav";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export const metadata: Metadata = {
   title: "Blog — Artikel Wibu & Anime | WibuQuiz",
@@ -38,15 +43,18 @@ function formatIndonesianDate(dateStr: string): string {
 }
 
 async function getPublishedArticles(): Promise<Article[]> {
-  const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from("articles")
-    .select("id, judul, slug, gambar_url, updated_at")
-    .eq("status", "published")
-    .order("updated_at", { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from("articles")
+      .select("id, judul, slug, gambar_url, updated_at")
+      .eq("status", "published")
+      .order("updated_at", { ascending: false });
 
-  if (error) return [];
-  return data ?? [];
+    if (error) return [];
+    return data ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export default async function BlogPage() {
