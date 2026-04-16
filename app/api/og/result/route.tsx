@@ -82,8 +82,9 @@ export async function GET(req: NextRequest) {
 </svg>`;
 
   // Convert SVG to PNG for WhatsApp compatibility
-  const pngBuffer = await sharp(Buffer.from(svg))
-    .png()
+  const pngBuffer = await sharp(Buffer.from(svg), { density: 300 })
+    .resize(1200, 630)
+    .png({ quality: 95 })
     .toBuffer();
 
   return new NextResponse(pngBuffer as unknown as BodyInit, {
