@@ -43,7 +43,7 @@ export default function WibuLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className={`${nunito.variable}`}>
+    <div className={nunito.variable} style={{ fontFamily: "var(--font-nunito), 'Nunito', sans-serif" }}>
       {/* Plausible Analytics */}
       <Script
         defer
