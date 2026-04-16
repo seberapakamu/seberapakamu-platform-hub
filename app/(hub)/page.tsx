@@ -165,7 +165,7 @@ export default function HubPage() {
             transition: "opacity 0.15s",
           }}
         >
-          ☕ Dukung kami di Saweria
+          ☕ Seberapa dermawan kamu?
         </a>
         <span>© {new Date().getFullYear()} Seberapa Kamu? — All rights reserved.</span>
       </footer>
