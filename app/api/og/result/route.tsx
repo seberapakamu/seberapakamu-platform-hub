@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getTier } from "@/lib/scoring";
+import sharp from "sharp";
 
 export const dynamic = "force-dynamic";
 
@@ -80,10 +81,15 @@ export async function GET(req: NextRequest) {
   </text>
 </svg>`;
 
-  return new NextResponse(svg, {
+  // Convert SVG to PNG for WhatsApp compatibility
+  const pngBuffer = await sharp(Buffer.from(svg))
+    .png()
+    .toBuffer();
+
+  return new NextResponse(pngBuffer, {
     headers: {
-      "Content-Type": "image/svg+xml",
-      "Cache-Control": "public, max-age=3600",
+      "Content-Type": "image/png",
+      "Cache-Control": "public, max-age=3600, immutable",
     },
   });
 }
