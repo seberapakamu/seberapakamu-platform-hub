@@ -1,36 +1,40 @@
 import type { Metadata } from "next";
+import { createClient } from "@supabase/supabase-js";
+import { getTier } from "@/lib/scoring";
 
 interface Props {
   params: Promise<{ hash: string }>;
-  searchParams?: Promise<{ score?: string; username?: string; tier?: string }>;
 }
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL?.startsWith("https://seberapakamu")
-    ? process.env.NEXT_PUBLIC_BASE_URL
-    : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.URL // Netlify sets this automatically
-    ? process.env.URL
-    : "https://seberapakahkamu.netlify.app";
+const BASE_URL = process.env.URL || "https://seberapakahkamu.netlify.app";
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const sp = searchParams ? await searchParams : {};
-  const score = sp.score ?? "?";
-  const username = sp.username ? decodeURIComponent(sp.username) : "Seseorang";
+async function getResultByHash(hash: string) {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { data } = await supabase
+      .from("sessions")
+      .select("username, score, tier")
+      .eq("hash", hash)
+      .single();
+    return data;
+  } catch {
+    return null;
+  }
+}
 
-  const tierLabels: Record<string, string> = {
-    "1": "Casual Viewer 🌱",
-    "2": "Anime Enjoyer 🌸",
-    "3": "Wibu Terlatih ⚔️",
-    "4": "Wibu Veteran 🏆",
-    "5": "Sepuh Wibu 👑",
-  };
-  const tierLabel = sp.tier ? (tierLabels[sp.tier] ?? "Wibu") : "Wibu";
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { hash } = await params;
+  const result = await getResultByHash(hash);
 
-  const title = `${username} dapat ${score}/100 — ${tierLabel} | Seberapa Wibu Kamu?`;
-  const description = `${username} mendapat skor ${score}/100 dan menjadi ${tierLabel}. Coba kuis Seberapa Wibu Kamu dan temukan level kewibuan kamu!`;
+  const username = result?.username ?? "Seseorang";
+  const score = result?.score ?? 0;
+  const tierInfo = getTier(score);
 
+  const title = `${username} dapat ${score}/100 — ${tierInfo.title} | Seberapa Wibu Kamu?`;
+  const description = `${username} mendapat skor ${score}/100 dan menjadi ${tierInfo.title}. Coba kuis Seberapa Wibu Kamu dan temukan level kewibuan kamu!`;
   const ogImageUrl = `${BASE_URL}/api/og/result?score=${score}&username=${encodeURIComponent(username)}`;
 
   return {
@@ -40,14 +44,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       title,
       description,
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: `Hasil kuis ${username}: ${score}/100 — ${tierLabel}`,
-        },
-      ],
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
