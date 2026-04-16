@@ -1,0 +1,440 @@
+{
+  "soal": [
+    {
+      "id": 1,
+      "teks": "Apakah kamu pernah menonton lebih dari 100 judul anime?",
+      "tipe": "ya_tidak",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 2,
+      "teks": "Seberapa sering kamu menonton anime dalam seminggu?",
+      "tipe": "skala_1_5",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Hampir tidak pernah" },
+        { "nilai": 2, "label": "1-2 kali" },
+        { "nilai": 3, "label": "3-4 kali" },
+        { "nilai": 4, "label": "Hampir setiap hari" },
+        { "nilai": 5, "label": "Setiap hari, bahkan sambil makan" }
+      ]
+    },
+    {
+      "id": 3,
+      "teks": "Apakah kamu pernah skip tidur demi nonton anime sampai subuh?",
+      "tipe": "ya_tidak",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 4,
+      "teks": "Seberapa sering kamu binge-watch anime satu season dalam sehari?",
+      "tipe": "skala_1_5",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah" },
+        { "nilai": 2, "label": "Pernah sekali" },
+        { "nilai": 3, "label": "Beberapa kali" },
+        { "nilai": 4, "label": "Sering banget" },
+        { "nilai": 5, "label": "Itu rutinitas weekend-ku" }
+      ]
+    },
+    {
+      "id": 5,
+      "teks": "Apakah kamu punya list anime yang sudah ditonton (MAL, AniList, dll)?",
+      "tipe": "ya_tidak",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 6,
+      "teks": "Seberapa banyak koleksi merchandise anime yang kamu punya?",
+      "tipe": "skala_1_5",
+      "kategori": "Koleksi",
+      "bobot": 1.5,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak ada sama sekali" },
+        { "nilai": 2, "label": "1-5 item" },
+        { "nilai": 3, "label": "6-20 item" },
+        { "nilai": 4, "label": "21-50 item" },
+        { "nilai": 5, "label": "Kamarku adalah toko anime" }
+      ]
+    },
+    {
+      "id": 7,
+      "teks": "Apakah kamu pernah membeli figure/nendoroid karakter anime?",
+      "tipe": "ya_tidak",
+      "kategori": "Koleksi",
+      "bobot": 1.5,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 8,
+      "teks": "Seberapa besar budget bulananmu untuk merchandise/koleksi anime?",
+      "tipe": "skala_1_5",
+      "kategori": "Koleksi",
+      "bobot": 1.5,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Rp 0 (saya waras)" },
+        { "nilai": 2, "label": "< Rp 100.000" },
+        { "nilai": 3, "label": "Rp 100.000 - 500.000" },
+        { "nilai": 4, "label": "Rp 500.000 - 2.000.000" },
+        { "nilai": 5, "label": "> Rp 2.000.000 (dompet menangis)" }
+      ]
+    },
+    {
+      "id": 9,
+      "teks": "Apakah kamu pernah membeli manga fisik atau light novel?",
+      "tipe": "ya_tidak",
+      "kategori": "Koleksi",
+      "bobot": 1.5,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 10,
+      "teks": "Seberapa banyak koleksi manga/light novel fisik yang kamu punya?",
+      "tipe": "skala_1_5",
+      "kategori": "Koleksi",
+      "bobot": 1.5,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak ada" },
+        { "nilai": 2, "label": "1-10 volume" },
+        { "nilai": 3, "label": "11-30 volume" },
+        { "nilai": 4, "label": "31-100 volume" },
+        { "nilai": 5, "label": "> 100 volume (rak buku penuh)" }
+      ]
+    },
+    {
+      "id": 11,
+      "teks": "Apakah kamu bisa membaca hiragana dan katakana?",
+      "tipe": "ya_tidak",
+      "kategori": "Bahasa",
+      "bobot": 0.8,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 12,
+      "teks": "Seberapa sering kamu menonton anime tanpa subtitle?",
+      "tipe": "skala_1_5",
+      "kategori": "Bahasa",
+      "bobot": 0.8,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah, saya butuh sub" },
+        { "nilai": 2, "label": "Kadang untuk scene familiar" },
+        { "nilai": 3, "label": "Bisa untuk anime slice of life" },
+        { "nilai": 4, "label": "Sering, paham 70-80%" },
+        { "nilai": 5, "label": "Selalu, subtitle itu untuk pemula" }
+      ]
+    },
+    {
+      "id": 13,
+      "teks": "Apakah kamu pernah belajar bahasa Jepang secara formal (kursus/aplikasi)?",
+      "tipe": "ya_tidak",
+      "kategori": "Bahasa",
+      "bobot": 0.8,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 14,
+      "teks": "Seberapa banyak kosakata Jepang yang kamu tahu dari anime?",
+      "tipe": "skala_1_5",
+      "kategori": "Bahasa",
+      "bobot": 0.8,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Hanya 'kawaii' dan 'sugoi'" },
+        { "nilai": 2, "label": "Beberapa kata umum" },
+        { "nilai": 3, "label": "Cukup banyak untuk percakapan dasar" },
+        { "nilai": 4, "label": "Bisa ngerti dialog tanpa sub" },
+        { "nilai": 5, "label": "Saya bisa nulis surat ke seiyuu favorit" }
+      ]
+    },
+    {
+      "id": 15,
+      "teks": "Apakah kamu pernah menggunakan kata-kata Jepang dalam percakapan sehari-hari?",
+      "tipe": "ya_tidak",
+      "kategori": "Bahasa",
+      "bobot": 0.8,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 16,
+      "teks": "Apakah kamu aktif di komunitas anime online (Discord, forum, dll)?",
+      "tipe": "ya_tidak",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 17,
+      "teks": "Seberapa sering kamu berdiskusi tentang anime dengan orang lain?",
+      "tipe": "skala_1_5",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah, ini rahasia" },
+        { "nilai": 2, "label": "Jarang, hanya dengan teman dekat" },
+        { "nilai": 3, "label": "Kadang-kadang" },
+        { "nilai": 4, "label": "Sering, siapapun yang mau dengerin" },
+        { "nilai": 5, "label": "Setiap hari, bahkan dengan kucing" }
+      ]
+    },
+    {
+      "id": 18,
+      "teks": "Apakah kamu pernah menghadiri event anime (Comifuro, AFA, dll)?",
+      "tipe": "ya_tidak",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 19,
+      "teks": "Seberapa aktif kamu posting konten anime di media sosial?",
+      "tipe": "skala_1_5",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah" },
+        { "nilai": 2, "label": "Jarang, hanya kalau ada yang viral" },
+        { "nilai": 3, "label": "Kadang share meme atau review" },
+        { "nilai": 4, "label": "Sering, akun-ku penuh konten anime" },
+        { "nilai": 5, "label": "Akun-ku adalah akun anime" }
+      ]
+    },
+    {
+      "id": 20,
+      "teks": "Apakah kamu pernah cosplay karakter anime?",
+      "tipe": "ya_tidak",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 21,
+      "teks": "Seberapa luas pengetahuanmu tentang genre anime?",
+      "tipe": "skala_1_5",
+      "kategori": "Genre",
+      "bobot": 1.0,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Hanya tahu shonen dan isekai" },
+        { "nilai": 2, "label": "Tahu beberapa genre populer" },
+        { "nilai": 3, "label": "Familiar dengan sebagian besar genre" },
+        { "nilai": 4, "label": "Tahu hampir semua genre termasuk yang niche" },
+        { "nilai": 5, "label": "Bisa ceramah 3 jam tentang subgenre" }
+      ]
+    },
+    {
+      "id": 22,
+      "teks": "Apakah kamu pernah menonton anime genre josei atau seinen?",
+      "tipe": "ya_tidak",
+      "kategori": "Genre",
+      "bobot": 1.0,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 23,
+      "teks": "Seberapa sering kamu menonton anime yang bukan mainstream/populer?",
+      "tipe": "skala_1_5",
+      "kategori": "Genre",
+      "bobot": 1.0,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah, saya ikut arus" },
+        { "nilai": 2, "label": "Jarang, kalau ada rekomendasi" },
+        { "nilai": 3, "label": "Kadang explore sendiri" },
+        { "nilai": 4, "label": "Sering, hidden gem itu lebih seru" },
+        { "nilai": 5, "label": "Saya sudah nonton semua yang ada di MAL top 500" }
+      ]
+    },
+    {
+      "id": 24,
+      "teks": "Apakah kamu pernah menonton anime dengan rating dewasa (ecchi/harem)?",
+      "tipe": "ya_tidak",
+      "kategori": "Genre",
+      "bobot": 1.0,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 25,
+      "teks": "Seberapa dalam kamu mengikuti lore/worldbuilding anime favoritmu?",
+      "tipe": "skala_1_5",
+      "kategori": "Genre",
+      "bobot": 1.0,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Saya hanya nonton, tidak mikir dalam" },
+        { "nilai": 2, "label": "Paham plot utama saja" },
+        { "nilai": 3, "label": "Baca wiki kalau ada yang bingung" },
+        { "nilai": 4, "label": "Hafal detail lore dan teori" },
+        { "nilai": 5, "label": "Saya bisa nulis ensiklopedia-nya" }
+      ]
+    },
+    {
+      "id": 26,
+      "teks": "Apakah kamu pernah menangis karena adegan anime?",
+      "tipe": "ya_tidak",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak (bohong)" },
+        { "nilai": 1, "label": "Ya (dan tidak malu mengakuinya)" }
+      ]
+    },
+    {
+      "id": 27,
+      "teks": "Seberapa sering kamu re-watch anime yang sudah pernah ditonton?",
+      "tipe": "skala_1_5",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah, waktu terlalu berharga" },
+        { "nilai": 2, "label": "Jarang, hanya yang benar-benar favorit" },
+        { "nilai": 3, "label": "Kadang kalau kangen" },
+        { "nilai": 4, "label": "Sering, sudah hafal dialognya" },
+        { "nilai": 5, "label": "Re-watch adalah cara hidup" }
+      ]
+    },
+    {
+      "id": 28,
+      "teks": "Apakah kamu punya waifu/husbando resmi?",
+      "tipe": "ya_tidak",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak (saya masih waras)" },
+        { "nilai": 1, "label": "Ya (dan saya bangga)" }
+      ]
+    },
+    {
+      "id": 29,
+      "teks": "Seberapa banyak opening/ending anime yang kamu hafal liriknya?",
+      "tipe": "skala_1_5",
+      "kategori": "Bahasa",
+      "bobot": 0.8,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak ada" },
+        { "nilai": 2, "label": "1-5 lagu" },
+        { "nilai": 3, "label": "6-20 lagu" },
+        { "nilai": 4, "label": "21-50 lagu" },
+        { "nilai": 5, "label": "> 50 lagu, saya bisa jadi karaoke machine" }
+      ]
+    },
+    {
+      "id": 30,
+      "teks": "Apakah kamu pernah merekomendasikan anime ke orang yang tidak suka anime?",
+      "tipe": "ya_tidak",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya (misi penyebaran wibu)" }
+      ]
+    },
+    {
+      "id": 31,
+      "teks": "Seberapa sering kamu mengikuti anime season terbaru (seasonal anime)?",
+      "tipe": "skala_1_5",
+      "kategori": "Tonton",
+      "bobot": 1.2,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah, saya nonton yang sudah selesai" },
+        { "nilai": 2, "label": "Kadang, kalau ada yang menarik" },
+        { "nilai": 3, "label": "Biasanya ikut 2-3 judul per season" },
+        { "nilai": 4, "label": "Ikut 5-10 judul per season" },
+        { "nilai": 5, "label": "Saya nonton semua yang tayang, tanpa terkecuali" }
+      ]
+    },
+    {
+      "id": 32,
+      "teks": "Apakah kamu pernah membeli dakimakura (bantal peluk) karakter anime?",
+      "tipe": "ya_tidak",
+      "kategori": "Koleksi",
+      "bobot": 1.5,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak" },
+        { "nilai": 1, "label": "Ya" }
+      ]
+    },
+    {
+      "id": 33,
+      "teks": "Seberapa sering kamu membaca manga atau light novel?",
+      "tipe": "skala_1_5",
+      "kategori": "Genre",
+      "bobot": 1.0,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak pernah" },
+        { "nilai": 2, "label": "Jarang, hanya kalau anime-nya belum selesai" },
+        { "nilai": 3, "label": "Kadang-kadang" },
+        { "nilai": 4, "label": "Sering, manga > anime" },
+        { "nilai": 5, "label": "Setiap hari, saya sudah baca ratusan judul" }
+      ]
+    },
+    {
+      "id": 34,
+      "teks": "Apakah kamu tahu perbedaan antara sub dan dub, dan punya preferensi kuat?",
+      "tipe": "ya_tidak",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 0, "label": "Tidak terlalu peduli" },
+        { "nilai": 1, "label": "Ya, dan saya siap debat soal ini" }
+      ]
+    },
+    {
+      "id": 35,
+      "teks": "Seberapa besar pengaruh anime terhadap selera musik, fashion, atau gaya hidupmu?",
+      "tipe": "skala_1_5",
+      "kategori": "Komunitas",
+      "bobot": 1.3,
+      "opsi_jawaban": [
+        { "nilai": 1, "label": "Tidak ada pengaruh sama sekali" },
+        { "nilai": 2, "label": "Sedikit, mungkin playlist musik" },
+        { "nilai": 3, "label": "Lumayan, beberapa aspek terpengaruh" },
+        { "nilai": 4, "label": "Banyak, anime membentuk identitasku" },
+        { "nilai": 5, "label": "Anime adalah kepribadianku" }
+      ]
+    }
+  ]
+}
