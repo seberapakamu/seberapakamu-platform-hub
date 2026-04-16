@@ -6,8 +6,13 @@ interface Props {
 }
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  process.env.NEXT_PUBLIC_BASE_URL?.startsWith("https://seberapakamu")
+    ? process.env.NEXT_PUBLIC_BASE_URL
+    : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.URL // Netlify sets this automatically
+    ? process.env.URL
+    : "https://seberapakahkamu.netlify.app";
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const sp = searchParams ? await searchParams : {};
