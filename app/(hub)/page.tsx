@@ -35,16 +35,18 @@ export default function HubPage() {
           }
         }
         .saweria-btn:hover { opacity: 0.85; }
+        *, *::before, *::after { box-sizing: border-box; }
       `}</style>
 
       {/* Navbar */}
       <header
         style={{
-          padding: "1.25rem 2rem",
+          padding: "1.25rem 1rem",
           borderBottom: "1px solid var(--hub-border)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          width: "100%",
         }}
       >
         <span
@@ -81,7 +83,8 @@ export default function HubPage() {
           maxWidth: "1100px",
           width: "100%",
           margin: "0 auto",
-          padding: "3rem 1.5rem",
+          padding: "3rem 1rem",
+          boxSizing: "border-box",
         }}
       >
         {/* Hero Section */}

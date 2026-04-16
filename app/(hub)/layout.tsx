@@ -45,6 +45,8 @@ export default function HubLayout({
         background: "var(--hub-bg, #0F0F1A)",
         color: "var(--hub-text, #F0F0FF)",
         minHeight: "100vh",
+        overflowX: "hidden",
+        width: "100%",
       }}
     >
       <style>{`
