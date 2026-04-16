@@ -31,13 +31,13 @@ async function copyToClipboard(text: string): Promise<void> {
 }
 
 function buildShareUrl(hash: string, score: number, username: string, tier: number): string {
-  if (typeof window === "undefined") return `/result/${hash}`;
+  if (typeof window === "undefined") return `/wibu/result/${hash}`;
   const params = new URLSearchParams({
     score: String(score),
     username,
     tier: String(tier),
   });
-  return `${window.location.origin}/result/${hash}?${params.toString()}`;
+  return `${window.location.origin}/wibu/result/${hash}?${params.toString()}`;
 }
 
 const PLATFORM_BUTTONS = [
