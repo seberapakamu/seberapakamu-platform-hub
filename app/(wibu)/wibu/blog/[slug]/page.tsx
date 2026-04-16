@@ -33,16 +33,20 @@ function stripHtml(html: string): string {
 }
 
 async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
-  const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from("articles")
-    .select("id, judul, slug, konten, gambar_url, updated_at")
-    .eq("slug", slug)
-    .eq("status", "published")
-    .single();
+  try {
+    const supabase = await createServerClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("id, judul, slug, konten, gambar_url, updated_at")
+      .eq("slug", slug)
+      .eq("status", "published")
+      .single();
 
-  if (error || !data) return null;
-  return data;
+    if (error || !data) return null;
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata({
@@ -50,28 +54,32 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const article = await getArticleBySlug(slug);
+  try {
+    const { slug } = await params;
+    const article = await getArticleBySlug(slug);
 
-  if (!article) {
-    return { title: "Artikel Tidak Ditemukan | WibuQuiz" };
-  }
+    if (!article) {
+      return { title: "Artikel Tidak Ditemukan | WibuQuiz" };
+    }
 
-  const description = stripHtml(article.konten).slice(0, 160);
+    const description = stripHtml(article.konten).slice(0, 160);
 
-  return {
-    title: `${article.judul} | WibuQuiz Blog`,
-    description,
-    openGraph: {
-      title: article.judul,
+    return {
+      title: `${article.judul} | WibuQuiz Blog`,
       description,
-      type: "article",
-      ...(article.gambar_url ? { images: [{ url: article.gambar_url }] } : {}),
-    },
-    alternates: {
-      canonical: `https://seberapakamu.id/wibu/blog/${article.slug}`,
-    },
-  };
+      openGraph: {
+        title: article.judul,
+        description,
+        type: "article",
+        ...(article.gambar_url ? { images: [{ url: article.gambar_url }] } : {}),
+      },
+      alternates: {
+        canonical: `https://seberapakamu.id/wibu/blog/${article.slug}`,
+      },
+    };
+  } catch {
+    return { title: "Blog | WibuQuiz" };
+  }
 }
 
 export default async function BlogArticlePage({
