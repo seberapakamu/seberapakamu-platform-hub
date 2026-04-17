@@ -583,7 +583,7 @@ export default function AdminContentPage() {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
             <Link
-              href="/admin/dashboard"
+              href="/admin/wibu"
               className="text-sm font-bold mb-1 inline-block transition-opacity hover:opacity-70"
               style={{ color: "var(--color-text-muted)" }}
             >

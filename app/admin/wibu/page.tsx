@@ -6,10 +6,9 @@ import Link from "next/link";
 import { TIERS } from "@/lib/scoring";
 
 const NAV_LINKS = [
-  { href: "/admin/questions", label: "📝 Pertanyaan", desc: "Kelola soal kuis" },
-  { href: "/admin/content", label: "📚 Konten Blog", desc: "Kelola artikel blog" },
-  { href: "/admin/site-content", label: "✏️ Edit Halaman", desc: "Edit konten landing, wiki, tier" },
-  { href: "/admin/analytics", label: "📊 Analitik", desc: "Statistik & hasil kuis" },
+  { href: "/admin/wibu/questions", label: "📝 Pertanyaan", desc: "Kelola soal kuis" },
+  { href: "/admin/wibu/content", label: "📚 Konten Blog", desc: "Kelola artikel blog" },
+  { href: "/admin/wibu/site-content", label: "✏️ Edit Halaman", desc: "Edit konten landing, wiki, tier" },
 ];
 
 function formatDuration(seconds: number): string {

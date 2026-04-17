@@ -6,7 +6,7 @@ import { createBrowserClient } from "@/lib/supabase";
 
 const STORAGE_KEY = "admin_login_attempts";
 const MAX_ATTEMPTS = 5;
-const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes in ms
+const LOCKOUT_DURATION = 15 * 60 * 1000;
 
 interface AttemptData {
   count: number;
@@ -50,7 +50,6 @@ export default function AdminLoginPage() {
       setLocked(true);
       setCountdown(getRemainingMinutes(data.lockedUntil));
     } else if (data.lockedUntil && data.lockedUntil <= Date.now()) {
-      // Lockout expired — reset
       saveAttemptData({ count: 0, lockedUntil: null });
       setLocked(false);
     }
@@ -60,7 +59,6 @@ export default function AdminLoginPage() {
     checkLockout();
   }, [checkLockout]);
 
-  // Countdown ticker
   useEffect(() => {
     if (!locked) return;
     const interval = setInterval(() => {
@@ -95,13 +93,10 @@ export default function AdminLoginPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setAuthError(null);
-
     if (!validate()) return;
-
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-
     if (error) {
       const data = getAttemptData();
       const newCount = data.count + 1;
@@ -116,46 +111,90 @@ export default function AdminLoginPage() {
       }
       return;
     }
-
-    // Success — reset counter and redirect
     saveAttemptData({ count: 0, lockedUntil: null });
-    router.push("/admin/dashboard");
+    router.push("/admin");
   }
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4 py-16"
-      style={{ backgroundColor: "var(--color-bg)" }}
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+        background: "#0F0F1A",
+        color: "#F0F0FF",
+        fontFamily: "var(--font-nunito), 'Nunito', Arial, sans-serif",
+      }}
     >
-      {/* Decorative blobs */}
-      <div
-        className="fixed -top-20 -left-20 w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ backgroundColor: "var(--color-primary)" }}
-        aria-hidden="true"
-      />
-      <div
-        className="fixed -bottom-20 -right-20 w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ backgroundColor: "var(--color-accent)" }}
-        aria-hidden="true"
-      />
+      <style>{`
+        .admin-input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border-radius: 0.625rem;
+          font-size: 1rem;
+          font-weight: 600;
+          background: #0F0F1A;
+          color: #F0F0FF;
+          border: 2px solid #2A2A45;
+          outline: none;
+          transition: border-color 0.15s;
+          box-sizing: border-box;
+        }
+        .admin-input::placeholder { color: #4A4A6A; }
+        .admin-input:focus { border-color: #FF9A9E; }
+        .admin-input:disabled { opacity: 0.45; cursor: not-allowed; }
+        .admin-input.error { border-color: #C0394A; }
+        .login-btn {
+          width: 100%;
+          padding: 0.875rem;
+          border-radius: 0.625rem;
+          font-size: 1rem;
+          font-weight: 900;
+          color: #0F0F1A;
+          background: #FF9A9E;
+          border: none;
+          cursor: pointer;
+          transition: box-shadow 0.2s ease, transform 0.15s ease, opacity 0.15s;
+        }
+        .login-btn:hover:not(:disabled) {
+          box-shadow: 0 0 20px #FF9A9E66, 0 0 40px #FF9A9E33;
+          transform: translateY(-2px);
+        }
+        .login-btn:active:not(:disabled) { transform: translateY(0); }
+        .login-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        *, *::before, *::after { box-sizing: border-box; }
+      `}</style>
 
       <div
-        className="relative w-full max-w-md rounded-3xl shadow-lg p-8 sm:p-10"
         style={{
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
+          width: "100%",
+          maxWidth: "420px",
+          background: "#1A1A2E",
+          border: "2px solid #FF9A9E",
+          borderRadius: "1rem",
+          padding: "2.5rem 2rem",
+          boxShadow: "0 0 40px #FF9A9E22",
         }}
       >
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="text-5xl mb-3" aria-hidden="true">🔐</div>
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <div style={{ fontSize: "3.5rem", lineHeight: 1, marginBottom: "0.75rem" }} aria-hidden="true">
+            🔐
+          </div>
           <h1
-            className="text-2xl sm:text-3xl font-black mb-2"
-            style={{ color: "var(--color-text-bold)" }}
+            style={{
+              margin: "0 0 0.5rem",
+              fontSize: "1.75rem",
+              fontWeight: 900,
+              color: "#FFFFFF",
+              letterSpacing: "-0.02em",
+            }}
           >
             Admin Login
           </h1>
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+          <p style={{ margin: 0, fontSize: "0.875rem", color: "#9090B0" }}>
             Selamat datang kembali, admin-chan~ 🌸
           </p>
         </div>
@@ -164,11 +203,16 @@ export default function AdminLoginPage() {
         {locked && (
           <div
             role="alert"
-            className="mb-6 px-4 py-3 rounded-2xl text-sm font-semibold text-center"
             style={{
-              backgroundColor: "var(--color-surface-alt)",
-              border: "1px solid var(--color-error)",
-              color: "var(--color-error)",
+              marginBottom: "1.5rem",
+              padding: "0.75rem 1rem",
+              borderRadius: "0.625rem",
+              fontSize: "0.875rem",
+              fontWeight: 700,
+              textAlign: "center",
+              background: "rgba(192,57,74,0.15)",
+              border: "1px solid #C0394A",
+              color: "#FF6B7A",
             }}
           >
             🔒 Terlalu banyak percobaan. Coba lagi dalam{" "}
@@ -180,11 +224,16 @@ export default function AdminLoginPage() {
         {authError && !locked && (
           <div
             role="alert"
-            className="mb-6 px-4 py-3 rounded-2xl text-sm font-semibold text-center"
             style={{
-              backgroundColor: "var(--color-surface-alt)",
-              border: "1px solid var(--color-error)",
-              color: "var(--color-error)",
+              marginBottom: "1.5rem",
+              padding: "0.75rem 1rem",
+              borderRadius: "0.625rem",
+              fontSize: "0.875rem",
+              fontWeight: 700,
+              textAlign: "center",
+              background: "rgba(192,57,74,0.15)",
+              border: "1px solid #C0394A",
+              color: "#FF6B7A",
             }}
           >
             ⚠️ {authError}
@@ -193,11 +242,16 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} noValidate>
           {/* Email */}
-          <div className="mb-5">
+          <div style={{ marginBottom: "1.25rem" }}>
             <label
               htmlFor="email"
-              className="block text-sm font-bold mb-2"
-              style={{ color: "var(--color-text-bold)" }}
+              style={{
+                display: "block",
+                fontSize: "0.875rem",
+                fontWeight: 700,
+                color: "#F0F0FF",
+                marginBottom: "0.5rem",
+              }}
             >
               Email
             </label>
@@ -214,25 +268,13 @@ export default function AdminLoginPage() {
               disabled={locked || loading}
               aria-describedby={fieldErrors.email ? "email-error" : undefined}
               aria-invalid={!!fieldErrors.email}
-              className="w-full px-4 py-3 rounded-2xl text-base font-semibold outline-none transition-all disabled:opacity-50"
-              style={{
-                backgroundColor: "var(--color-bg)",
-                border: `2px solid ${fieldErrors.email ? "var(--color-error)" : "var(--color-border)"}`,
-                color: "var(--color-text-bold)",
-              }}
-              onFocus={(e) => {
-                if (!fieldErrors.email) e.currentTarget.style.borderColor = "var(--color-primary)";
-              }}
-              onBlur={(e) => {
-                if (!fieldErrors.email) e.currentTarget.style.borderColor = "var(--color-border)";
-              }}
+              className={`admin-input${fieldErrors.email ? " error" : ""}`}
             />
             {fieldErrors.email && (
               <p
                 id="email-error"
                 role="alert"
-                className="mt-1 text-xs font-bold"
-                style={{ color: "var(--color-error)" }}
+                style={{ margin: "0.25rem 0 0", fontSize: "0.75rem", fontWeight: 700, color: "#FF6B7A" }}
               >
                 ⚠️ {fieldErrors.email}
               </p>
@@ -240,11 +282,16 @@ export default function AdminLoginPage() {
           </div>
 
           {/* Password */}
-          <div className="mb-7">
+          <div style={{ marginBottom: "2rem" }}>
             <label
               htmlFor="password"
-              className="block text-sm font-bold mb-2"
-              style={{ color: "var(--color-text-bold)" }}
+              style={{
+                display: "block",
+                fontSize: "0.875rem",
+                fontWeight: 700,
+                color: "#F0F0FF",
+                marginBottom: "0.5rem",
+              }}
             >
               Password
             </label>
@@ -261,37 +308,20 @@ export default function AdminLoginPage() {
               disabled={locked || loading}
               aria-describedby={fieldErrors.password ? "password-error" : undefined}
               aria-invalid={!!fieldErrors.password}
-              className="w-full px-4 py-3 rounded-2xl text-base font-semibold outline-none transition-all disabled:opacity-50"
-              style={{
-                backgroundColor: "var(--color-bg)",
-                border: `2px solid ${fieldErrors.password ? "var(--color-error)" : "var(--color-border)"}`,
-                color: "var(--color-text-bold)",
-              }}
-              onFocus={(e) => {
-                if (!fieldErrors.password) e.currentTarget.style.borderColor = "var(--color-primary)";
-              }}
-              onBlur={(e) => {
-                if (!fieldErrors.password) e.currentTarget.style.borderColor = "var(--color-border)";
-              }}
+              className={`admin-input${fieldErrors.password ? " error" : ""}`}
             />
             {fieldErrors.password && (
               <p
                 id="password-error"
                 role="alert"
-                className="mt-1 text-xs font-bold"
-                style={{ color: "var(--color-error)" }}
+                style={{ margin: "0.25rem 0 0", fontSize: "0.75rem", fontWeight: 700, color: "#FF6B7A" }}
               >
                 ⚠️ {fieldErrors.password}
               </p>
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={locked || loading}
-            className="w-full py-4 rounded-2xl text-base font-black text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
-            style={{ backgroundColor: "var(--color-primary)" }}
-          >
+          <button type="submit" disabled={locked || loading} className="login-btn">
             {loading ? "Memproses..." : "Masuk 🚀"}
           </button>
         </form>

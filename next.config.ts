@@ -41,6 +41,27 @@ const nextConfig: NextConfig = {
         destination: "/wibu/blog/:slug",
         permanent: true,
       },
+      // Redirect URL admin lama → prefix /admin/wibu/
+      {
+        source: "/admin/dashboard",
+        destination: "/admin/wibu",
+        permanent: true,
+      },
+      {
+        source: "/admin/questions",
+        destination: "/admin/wibu/questions",
+        permanent: true,
+      },
+      {
+        source: "/admin/content",
+        destination: "/admin/wibu/content",
+        permanent: true,
+      },
+      {
+        source: "/admin/site-content",
+        destination: "/admin/wibu/site-content",
+        permanent: true,
+      },
     ];
   },
   images: {

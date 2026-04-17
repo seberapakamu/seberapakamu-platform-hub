@@ -1,11 +1,8 @@
 import type { Module } from "@/lib/hub/modules";
+import { isMascotImage } from "@/lib/shared";
 
 interface ComingSoonCardProps {
   module: Module;
-}
-
-function isMascotImage(mascot: string): boolean {
-  return mascot.startsWith("/") || mascot.includes(".");
 }
 
 export default function ComingSoonCard({ module }: ComingSoonCardProps) {
