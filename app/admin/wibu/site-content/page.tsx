@@ -779,7 +779,7 @@ export default function AdminSiteContentPage() {
         {/* Header */}
         <div className="mb-6">
           <Link
-            href="/admin/dashboard"
+            href="/admin/wibu"
             className="text-sm font-bold mb-1 inline-block transition-opacity hover:opacity-70"
             style={{ color: "var(--color-text-muted)" }}
           >

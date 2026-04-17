@@ -1,12 +1,9 @@
 import Link from "next/link";
 import type { Module } from "@/lib/hub/modules";
+import { isMascotImage } from "@/lib/shared";
 
 interface ModuleCardProps {
   module: Module;
-}
-
-function isMascotImage(mascot: string): boolean {
-  return mascot.startsWith("/") || mascot.includes(".");
 }
 
 export default function ModuleCard({ module }: ModuleCardProps) {

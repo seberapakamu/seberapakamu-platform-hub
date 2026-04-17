@@ -42,7 +42,7 @@ export function PublicNavbar() {
       >
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-xl font-black" style={{ color: "var(--color-primary)" }}>
+          <Link href="/wibu" className="text-xl font-black" style={{ color: "var(--color-primary)" }}>
             🌸 WibuQuiz
           </Link>
 

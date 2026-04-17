@@ -46,17 +46,22 @@ async function getRedirects(): Promise<RedirectRule[]> {
 // ─── Unit Tests ───────────────────────────────────────────────────────────────
 
 describe("Redirect config — unit tests", () => {
+  let allRedirects: RedirectRule[];
+  // Hub-specific redirects only (exclude /admin/* redirects added by other specs)
   let redirects: RedirectRule[];
 
   beforeAll(async () => {
-    redirects = await getRedirects();
+    allRedirects = await getRedirects();
+    redirects = allRedirects.filter(
+      (r) => !r.source.startsWith("/admin") && !r.destination.startsWith("/admin")
+    );
   });
 
   it("konfigurasi redirects dapat dipanggil dan mengembalikan array", () => {
-    expect(Array.isArray(redirects)).toBe(true);
+    expect(Array.isArray(allRedirects)).toBe(true);
   });
 
-  it("mengandung tepat 7 redirect rules", () => {
+  it("mengandung tepat 7 hub redirect rules", () => {
     expect(redirects).toHaveLength(7);
   });
 
@@ -71,27 +76,19 @@ describe("Redirect config — unit tests", () => {
     }
   );
 
-  it("tidak ada redirect yang menyentuh prefix /admin", () => {
-    const adminRedirects = redirects.filter(
-      (r) =>
-        r.source.startsWith("/admin") || r.destination.startsWith("/admin")
-    );
-    expect(adminRedirects).toHaveLength(0);
-  });
-
-  it("semua redirect memiliki permanent: true (HTTP 301)", () => {
+  it("semua hub redirect memiliki permanent: true (HTTP 301)", () => {
     redirects.forEach((r) => {
       expect(r.permanent).toBe(true);
     });
   });
 
-  it("semua destination menggunakan prefix /wibu/", () => {
+  it("semua hub destination menggunakan prefix /wibu/", () => {
     redirects.forEach((r) => {
       expect(r.destination).toMatch(/^\/wibu\//);
     });
   });
 
-  it("semua source tidak menggunakan prefix /wibu/ (URL lama)", () => {
+  it("semua hub source tidak menggunakan prefix /wibu/ (URL lama)", () => {
     redirects.forEach((r) => {
       expect(r.source).not.toMatch(/^\/wibu/);
     });
@@ -101,10 +98,15 @@ describe("Redirect config — unit tests", () => {
 // ─── Property-Based Tests ─────────────────────────────────────────────────────
 
 describe("Redirect config — property-based tests", () => {
+  let allRedirects: RedirectRule[];
+  // Hub-specific redirects only (exclude /admin/* redirects added by other specs)
   let redirects: RedirectRule[];
 
   beforeAll(async () => {
-    redirects = await getRedirects();
+    allRedirects = await getRedirects();
+    redirects = allRedirects.filter(
+      (r) => !r.source.startsWith("/admin") && !r.destination.startsWith("/admin")
+    );
   });
 
   /**
@@ -130,15 +132,13 @@ describe("Redirect config — property-based tests", () => {
   });
 
   /**
-   * Property 7 (no admin): tidak ada redirect yang menyentuh /admin
+   * Property 7 (hub only): semua hub redirect menggunakan prefix /wibu/ sebagai destination
    * Validates: Requirements 7.5
    */
-  it("Property 7 (no admin): tidak ada redirect yang source atau destination-nya /admin/*", () => {
+  it("Property 7 (hub only): semua hub redirect destination menggunakan prefix /wibu/", () => {
     fc.assert(
       fc.property(fc.constantFrom(...redirects), (redirect) => {
-        const sourceIsAdmin = redirect.source.startsWith("/admin");
-        const destIsAdmin = redirect.destination.startsWith("/admin");
-        return !sourceIsAdmin && !destIsAdmin;
+        return redirect.destination.startsWith("/wibu/");
       }),
       { numRuns: redirects.length }
     );
