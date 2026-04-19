@@ -31,11 +31,13 @@ const DEFAULT_HOW: HowItWorksItem[] = [
 ];
 const DEFAULT_QUIZ_LIST: QuizListItem[] = [
   { id: "wibu-purity-test", title: "Wibu Purity Test 🎌", description: "Seberapa dalam kamu tenggelam di dunia anime? Jawab 35 pertanyaan jujur seputar tontonan, koleksi, bahasa, dan komunitas wibu-mu!", questionCount: 35, emoji: "🌸", badge: "Populer" },
+  { id: "tebak-karakter", title: "Tebak Karakter Anime 🎭", description: "Tebak nama karakter anime dari petunjuk bertahap — siluet, kutipan, kekuatan, hingga asal anime. Semakin sedikit petunjuk, semakin tinggi skor!", questionCount: 10, emoji: "🎭", badge: "Baru" },
 ];
 
 async function getSiteContent() {
   try {
     const supabase = await createServerClient();
+    // Hitung semua pengguna kuis (wibu purity test + tebak karakter)
     const { count: total } = await supabase.from("sessions").select("*", { count: "exact", head: true });
     const { data: contentRows } = await supabase
       .from("site_content")
@@ -105,13 +107,13 @@ export default async function WibuHomePage() {
               {hero.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <Link
-                href="/wibu/username"
+              <a
+                href="#kuis"
                 className="px-8 py-4 rounded-full text-lg font-black text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
                 style={{ backgroundColor: "var(--color-primary)" }}
               >
                 {hero.ctaPrimary}
-              </Link>
+              </a>
               <Link
                 href="/wibu/wiki"
                 className="px-8 py-4 rounded-full text-lg font-bold transition-colors hover:opacity-80"
@@ -165,7 +167,7 @@ export default async function WibuHomePage() {
         </section>
 
         {/* Quiz List Section */}
-        <section className="py-16 px-4">
+        <section id="kuis" className="py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <h2
               className="text-3xl font-black text-center mb-2"
@@ -223,7 +225,7 @@ export default async function WibuHomePage() {
                       📝 {quiz.questionCount} pertanyaan
                     </span>
                     <Link
-                      href="/wibu/username"
+                      href={quiz.id === "tebak-karakter" ? "/wibu/tebak-username" : "/wibu/username"}
                       className="px-5 py-2 rounded-full text-sm font-bold text-white transition-opacity hover:opacity-90"
                       style={{ backgroundColor: "var(--color-accent)" }}
                     >
@@ -233,40 +235,6 @@ export default async function WibuHomePage() {
                 </div>
               ))}
 
-              {/* Coming Soon Card */}
-              <div
-                className="rounded-2xl p-6 flex flex-col gap-4 opacity-60"
-                style={{
-                  backgroundColor: "var(--color-surface)",
-                  border: "2px dashed var(--color-border)",
-                }}
-              >
-                <div className="text-4xl" aria-hidden="true">🔮</div>
-                <div>
-                  <h3
-                    className="text-xl font-black mb-2"
-                    style={{ color: "var(--color-text-bold)" }}
-                  >
-                    Kuis Lainnya
-                  </h3>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "var(--color-text-muted)" }}
-                  >
-                    Kuis baru sedang dalam pengembangan. Stay tuned untuk update
-                    selanjutnya! ✨
-                  </p>
-                </div>
-                <span
-                  className="text-xs font-bold px-3 py-1 rounded-full self-start"
-                  style={{
-                    backgroundColor: "var(--color-surface-alt)",
-                    color: "var(--color-text-muted)",
-                  }}
-                >
-                  Segera Hadir
-                </span>
-              </div>
             </div>
           </div>
         </section>

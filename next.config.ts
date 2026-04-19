@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["10.207.116.97"],
+  allowedDevOrigins: ["10.207.116.97", "10.215.219.97"],
   async redirects() {
     return [
       // Redirect URL lama modul wibu → prefix /wibu/
@@ -77,6 +77,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.myanimelist.net",
       },
     ],
   },

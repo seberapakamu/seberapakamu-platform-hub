@@ -205,6 +205,7 @@ export default function QuizPage() {
   const router = useRouter();
   const store = useQuizStore();
   const [showResume, setShowResume] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Timer config fetched from /api/admin/config
   const [timerEnabled, setTimerEnabled] = useState(false);
@@ -264,6 +265,9 @@ export default function QuizPage() {
   }
 
   async function handleFinish() {
+    if (isSubmitting) return; // guard against double-click
+    setIsSubmitting(true);
+
     const score = calculateScore(store.answers, store.questions);
     const tier = getTier(score);
     const finishedAt = new Date().toISOString();
@@ -280,16 +284,7 @@ export default function QuizPage() {
       ? Math.round((Date.now() - store.startTime) / 1000)
       : 0;
 
-    saveCompletedSession({
-      hash,
-      username: store.username,
-      score,
-      tier: String(tier.tier),
-      startedAt: store.startTime ? new Date(store.startTime).toISOString() : new Date().toISOString(),
-      finishedAt,
-      durationSeconds,
-    });
-
+    // Save to localStorage first so result page loads instantly
     const resultData = {
       hash,
       username: store.username,
@@ -300,9 +295,21 @@ export default function QuizPage() {
     localStorage.setItem(`wibu_result_${hash}`, JSON.stringify(resultData));
     localStorage.setItem("wibu_active_result_hash", hash);
 
+    // Navigate immediately — DB save happens in background
     router.push(
       `/wibu/result/${hash}?score=${score}&username=${encodeURIComponent(store.username)}&tier=${tier.tier}`
     );
+
+    // Fire-and-forget DB insert (no await needed, localStorage is source of truth for result page)
+    saveCompletedSession({
+      hash,
+      username: store.username,
+      score,
+      tier: String(tier.tier),
+      startedAt: store.startTime ? new Date(store.startTime).toISOString() : new Date().toISOString(),
+      finishedAt,
+      durationSeconds,
+    });
   }
 
   // ── Loading state ──
@@ -460,16 +467,18 @@ export default function QuizPage() {
             ) : (
               <button
                 onClick={handleFinish}
-                disabled={!allAnswered}
+                disabled={!allAnswered || isSubmitting}
                 className="px-6 py-3 rounded-2xl font-black text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
                 style={{
-                  backgroundColor: allAnswered
+                  backgroundColor: allAnswered && !isSubmitting
                     ? "var(--color-accent)"
                     : "var(--color-border)",
-                  color: allAnswered ? "#fff" : "var(--color-text-muted)",
+                  color: allAnswered && !isSubmitting ? "#fff" : "var(--color-text-muted)",
                 }}
                 aria-label={
-                  allAnswered
+                  isSubmitting
+                    ? "Menyimpan hasil..."
+                    : allAnswered
                     ? "Selesaikan kuis"
                     : `Masih ada ${totalQuestions - answeredCount} pertanyaan belum dijawab`
                 }
@@ -479,7 +488,7 @@ export default function QuizPage() {
                     : undefined
                 }
               >
-                🏁 Selesai!
+                {isSubmitting ? "⏳ Menyimpan..." : "🏁 Selesai!"}
               </button>
             )}
           </div>
