@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { Nunito } from "next/font/google";
 import "@/app/globals.css";
+
+const nunito = Nunito({
+  variable: "--font-bucin",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -36,7 +43,7 @@ export default function BucinLayout({
 }>) {
   return (
     <div
-      className="bucin-theme-wrapper min-h-screen"
+      className={`${nunito.variable} bucin-theme-wrapper min-h-screen`}
       style={
         {
           "--color-primary": "#FF4B72",
@@ -58,6 +65,7 @@ export default function BucinLayout({
           "--color-text-inverse": "#FFFFFF",
           backgroundColor: "var(--color-bg)",
           color: "var(--color-text)",
+          fontFamily: "var(--font-bucin), sans-serif",
         } as React.CSSProperties
       }
     >
