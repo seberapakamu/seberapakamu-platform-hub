@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTebakStore } from "@/lib/store/tebakStore";
 import { createBrowserClient } from "@/lib/supabase";
-import { generateUUID } from "@/lib/tebakUtils";
+import { generateUUID } from "@/lib/quizUtils";
 import type { AnimeCharacter, TebakConfig, TebakSession, SoalResult } from "@/lib/types/tebak";
 import TebakProgressBar from "@/components/TebakProgressBar";
 import TebakStreakDisplay from "@/components/TebakStreakDisplay";

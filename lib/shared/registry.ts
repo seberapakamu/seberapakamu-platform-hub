@@ -60,7 +60,7 @@ export const MODULES: UnifiedModule[] = [
     slug: 'bucin',
     name: 'Seberapa Bucin Kamu?',
     description: 'Seberapa dalam kamu jatuh cinta? Tes level bucin-mu sekarang!',
-    status: 'coming_soon',
+    status: 'active',
     mascotEmoji: '💘',
     mascotAlt: 'Panah cinta — maskot modul bucin',
     accentColor: '#FF6B9D', // Hot pink — tema romance

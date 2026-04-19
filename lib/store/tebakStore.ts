@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import type { AnimeCharacter, TebakConfig, TebakSession } from "../types/tebak";
 import { calculateSoalScore } from "../tebakScoring";
-import { generateUUID } from "../tebakUtils";
+import { generateUUID } from "../quizUtils";
 
 const STORAGE_KEY = "tebak_session";
 

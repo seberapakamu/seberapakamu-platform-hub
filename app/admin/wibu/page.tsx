@@ -41,11 +41,11 @@ export default async function AdminDashboardPage() {
     { data: tierRows },
     { data: durationRows },
   ] = await Promise.all([
-    admin.from("sessions").select("*", { count: "exact", head: true }),
-    admin.from("sessions").select("*", { count: "exact", head: true }).not("finished_at", "is", null),
-    admin.from("sessions").select("*", { count: "exact", head: true }).eq("share_clicked", true).not("finished_at", "is", null),
-    admin.from("sessions").select("tier").not("tier", "is", null),
-    admin.from("sessions").select("started_at, finished_at").not("finished_at", "is", null),
+    admin.from("sessions").select("*", { count: "exact", head: true }).eq("quiz_type", "purity-test"),
+    admin.from("sessions").select("*", { count: "exact", head: true }).eq("quiz_type", "purity-test").not("finished_at", "is", null),
+    admin.from("sessions").select("*", { count: "exact", head: true }).eq("quiz_type", "purity-test").eq("share_clicked", true).not("finished_at", "is", null),
+    admin.from("sessions").select("tier").eq("quiz_type", "purity-test").not("tier", "is", null),
+    admin.from("sessions").select("started_at, finished_at").eq("quiz_type", "purity-test").not("finished_at", "is", null),
   ]);
 
   const started = totalStarted ?? 0;

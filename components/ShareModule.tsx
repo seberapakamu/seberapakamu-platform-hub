@@ -14,6 +14,8 @@ interface ShareModuleProps {
   tierInfo: TierInfo;
   username: string;
   score: number;
+  basePath?: string;
+  generateCaptionFn?: (tierInfo: TierInfo, style: CaptionStyle) => string;
 }
 
 async function copyToClipboard(text: string): Promise<void> {
@@ -30,14 +32,14 @@ async function copyToClipboard(text: string): Promise<void> {
   document.body.removeChild(el);
 }
 
-function buildShareUrl(hash: string, score: number, username: string, tier: number): string {
-  if (typeof window === "undefined") return `/wibu/result/${hash}`;
+function buildShareUrl(basePath: string, hash: string, score: number, username: string, tier: number): string {
+  if (typeof window === "undefined") return `${basePath}${hash}`;
   const params = new URLSearchParams({
     score: String(score),
     username,
     tier: String(tier),
   });
-  return `${window.location.origin}/wibu/result/${hash}?${params.toString()}`;
+  return `${window.location.origin}${basePath}${hash}?${params.toString()}`;
 }
 
 const PLATFORM_BUTTONS = [
@@ -75,16 +77,16 @@ const PLATFORM_BUTTONS = [
   },
 ] as const;
 
-export default function ShareModule({ hash, tierInfo, username, score }: ShareModuleProps) {
+export default function ShareModule({ hash, tierInfo, username, score, basePath = "/wibu/result/", generateCaptionFn = generateCaption }: ShareModuleProps) {
   const [captionStyle, setCaptionStyle] = useState<CaptionStyle>(() => getRandomStyle());
   const [caption, setCaption] = useState<string>(() =>
-    generateCaption(tierInfo, getRandomStyle())
+    generateCaptionFn(tierInfo, getRandomStyle())
   );
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCaption, setCopiedCaption] = useState(false);
   const [instagramCopied, setInstagramCopied] = useState(false);
 
-  const shareUrl = buildShareUrl(hash, score, username, tierInfo.tier);
+  const shareUrl = buildShareUrl(basePath, hash, score, username, tierInfo.tier);
 
   function trackShare() {
     const sessionId = getStoredSupabaseSessionId();
@@ -97,8 +99,8 @@ export default function ShareModule({ hash, tierInfo, username, score }: ShareMo
     const others = styles.filter((s) => s !== captionStyle);
     const newStyle = others[Math.floor(Math.random() * others.length)];
     setCaptionStyle(newStyle);
-    setCaption(generateCaption(tierInfo, newStyle));
-  }, [captionStyle, tierInfo]);
+    setCaption(generateCaptionFn(tierInfo, newStyle));
+  }, [captionStyle, tierInfo, generateCaptionFn]);
 
   const handleCopyLink = useCallback(async () => {
     await copyToClipboard(shareUrl);
@@ -126,7 +128,7 @@ export default function ShareModule({ hash, tierInfo, username, score }: ShareMo
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Aku dapat tier "${tierInfo.title}" di Seberapa Wibu Kamu!`,
+          title: `Aku dapat tier "${tierInfo.title}"!`,
           text: caption,
           url: shareUrl,
         });

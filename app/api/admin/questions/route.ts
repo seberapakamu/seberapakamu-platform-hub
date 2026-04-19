@@ -5,25 +5,30 @@ export interface QuestionRow {
   id: number;
   teks: string;
   tipe: "ya_tidak" | "skala_1_5";
-  kategori: "Tonton" | "Koleksi" | "Bahasa" | "Komunitas" | "Genre";
+  kategori: string;
   bobot: number;
   opsi_jawaban: { nilai: number; label: string }[];
   aktif: boolean;
   created_at: string;
+  module_slug: string;
 }
 
 type QuestionPayload = Omit<QuestionRow, "id" | "created_at">;
+
+const WIBU_CATEGORIES = ["Tonton", "Koleksi", "Bahasa", "Komunitas", "Genre"];
+const BUCIN_CATEGORIES = ["Komunikasi", "Pengorbanan", "Prioritas", "MediaSosial", "Keuangan"];
 
 function validatePayload(body: Partial<QuestionPayload>): string[] {
   const errors: string[] = [];
   if (!body.teks || body.teks.trim() === "") errors.push("teks wajib diisi");
   if (!body.tipe || !["ya_tidak", "skala_1_5"].includes(body.tipe))
     errors.push("tipe harus 'ya_tidak' atau 'skala_1_5'");
-  if (
-    !body.kategori ||
-    !["Tonton", "Koleksi", "Bahasa", "Komunitas", "Genre"].includes(body.kategori)
-  )
-    errors.push("kategori harus salah satu dari: Tonton, Koleksi, Bahasa, Komunitas, Genre");
+
+  const moduleSlug = body.module_slug || "wibu";
+  const validCategories = moduleSlug === "bucin" ? BUCIN_CATEGORIES : WIBU_CATEGORIES;
+  if (!body.kategori || !validCategories.includes(body.kategori))
+    errors.push(`kategori harus salah satu dari: ${validCategories.join(", ")}`);
+
   if (body.bobot === undefined || body.bobot === null || isNaN(Number(body.bobot)))
     errors.push("bobot wajib diisi dan harus berupa angka");
   if (!body.opsi_jawaban || !Array.isArray(body.opsi_jawaban) || body.opsi_jawaban.length === 0)
@@ -39,15 +44,17 @@ async function getAuthenticatedUser() {
   return user;
 }
 
-// GET /api/admin/questions — list all questions
-// Authenticated admins see all; unauthenticated callers see active-only (via RLS)
-export async function GET() {
+// GET /api/admin/questions — list questions
+// Supports ?module=wibu|bucin to filter by module_slug
+export async function GET(request: Request) {
   const user = await getAuthenticatedUser();
   const supabase = await createServerClient();
+  const { searchParams } = new URL(request.url);
+  const moduleSlug = searchParams.get("module") || "wibu";
 
-  const query = user
-    ? supabase.from("questions").select("*").order("id", { ascending: true })
-    : supabase.from("questions").select("*").eq("aktif", true).order("id", { ascending: true });
+  let query = user
+    ? supabase.from("questions").select("*").eq("module_slug", moduleSlug).order("id", { ascending: true })
+    : supabase.from("questions").select("*").eq("module_slug", moduleSlug).eq("aktif", true).order("id", { ascending: true });
 
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -79,6 +86,7 @@ export async function POST(request: Request) {
       bobot: Number(body.bobot),
       opsi_jawaban: body.opsi_jawaban!,
       aktif: body.aktif ?? true,
+      module_slug: body.module_slug || "wibu",
     })
     .select()
     .single();

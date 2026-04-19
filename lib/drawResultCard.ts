@@ -6,7 +6,7 @@
 import { CARD_TEMPLATES, type CardTemplate } from "@/components/ResultCard";
 import type { TierInfo } from "@/lib/scoring";
 
-const HUMORIS_QUOTES = [
+export const WIBU_QUOTES = [
   '"Anime bukan pelarian — ini adalah destinasi." — Sun Tzu (mungkin)',
   '"Satu episode lagi" — kata-kata terakhir sebelum subuh.',
   '"Aku tidak kecanduan anime. Aku hanya sangat berdedikasi."',
@@ -93,6 +93,9 @@ export interface DrawCardOptions {
   /** Output width in px (height is auto-calculated to match aspect) */
   width: number;
   height: number;
+  watermarkText?: string;
+  quotes?: string[];
+  template?: CardTemplate;
 }
 
 export function drawResultCard(
@@ -100,7 +103,7 @@ export function drawResultCard(
   opts: DrawCardOptions
 ): void {
   const { username, score, tierInfo, createdAt, templateIndex, width, height } = opts;
-  const template: CardTemplate = CARD_TEMPLATES[templateIndex];
+  const template: CardTemplate = opts.template ?? CARD_TEMPLATES[templateIndex];
 
   canvas.width = width;
   canvas.height = height;
@@ -231,7 +234,8 @@ export function drawResultCard(
 
   // ── Quote ────────────────────────────────────────────────────────────────
   const seed = username.length + Math.round(score);
-  const quote = HUMORIS_QUOTES[(seed + templateIndex) % HUMORIS_QUOTES.length];
+  const quoteList = opts.quotes ?? WIBU_QUOTES;
+  const quote = quoteList[(seed + templateIndex) % quoteList.length];
   ctx.font = `italic ${17 * s}px 'Segoe UI', system-ui, sans-serif`;
   ctx.fillStyle = "#8A8AA0";
   const quoteLines = wrapText(ctx, quote, width - 120 * s);
@@ -245,7 +249,7 @@ export function drawResultCard(
   // ── Watermark ────────────────────────────────────────────────────────────
   ctx.font = `700 ${18 * s}px 'Segoe UI', system-ui, sans-serif`;
   ctx.fillStyle = template.accentColor;
-  ctx.fillText("🌸 SeberapaWibu.id", width / 2, height - 50 * s);
+  ctx.fillText(opts.watermarkText ?? "🌸 SeberapaKamu.id", width / 2, height - 50 * s);
 
   ctx.font = `${16 * s}px 'Segoe UI', system-ui, sans-serif`;
   ctx.fillStyle = "#8A8AA0";

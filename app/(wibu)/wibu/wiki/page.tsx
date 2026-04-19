@@ -48,6 +48,7 @@ async function getWikiContent() {
     const { data } = await supabase
       .from("site_content")
       .select("key, value")
+      .eq("module_slug", "wibu")
       .in("key", ["wiki_faqs", "wiki_memes", "wiki_timeline"]);
     const get = (key: string) => data?.find((r) => r.key === key)?.value;
     return {

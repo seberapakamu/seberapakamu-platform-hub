@@ -1,4 +1,4 @@
-// lib/tebakUtils.ts
+// lib/quizUtils.ts
 
 const DANGEROUS_CHARS = /[&"'`\x00]/;
 const HTML_TAG_PATTERN = /<[^>]*>/;
@@ -6,11 +6,11 @@ const SCRIPT_INJECTION_PATTERN =
   /javascript\s*:|on\w+\s*=|expression\s*\(|vbscript\s*:/i;
 
 /**
- * Validasi username sebelum memulai kuis tebak karakter.
+ * Validasi username secara general untuk kuis.
  * Returns { valid: true } jika valid, atau { valid: false, error: string } jika tidak.
  */
 export function validateUsername(input: string): { valid: boolean; error?: string } {
-  if (!input || input.length === 0) {
+  if (!input || input.trim().length === 0) {
     return { valid: false, error: "Username wajib diisi" };
   }
 

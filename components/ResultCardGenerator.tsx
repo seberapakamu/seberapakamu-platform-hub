@@ -13,6 +13,10 @@ interface ResultCardGeneratorProps {
   score: number;
   tierInfo: TierInfo;
   createdAt: string;
+  watermarkText?: string;
+  quotes?: string[];
+  templates?: typeof CARD_TEMPLATES;
+  downloadFilenamePrefix?: string;
 }
 
 type Format = "1080x1080" | "1080x1920";
@@ -24,9 +28,13 @@ export default function ResultCardGenerator({
   score,
   tierInfo,
   createdAt,
+  watermarkText,
+  quotes,
+  templates = CARD_TEMPLATES,
+  downloadFilenamePrefix = "wibu-result",
 }: ResultCardGeneratorProps) {
   const [templateIndex, setTemplateIndex] = useState<number>(() =>
-    (username.length + Math.round(score)) % CARD_TEMPLATES.length
+    (username.length + Math.round(score)) % templates.length
   );
   const [format, setFormat] = useState<Format>("1080x1080");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -51,6 +59,9 @@ export default function ResultCardGenerator({
         templateIndex,
         width: w,
         height: h,
+        watermarkText,
+        quotes,
+        template: templates[templateIndex]
       });
 
       canvas.toBlob(
@@ -63,7 +74,7 @@ export default function ResultCardGenerator({
           const url = URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `wibu-result-${username}-${format}.png`;
+          a.download = `${downloadFilenamePrefix}-${username}-${format}.png`;
           a.click();
           URL.revokeObjectURL(url);
           setIsGenerating(false);
@@ -78,7 +89,7 @@ export default function ResultCardGenerator({
   }, [format, username, score, tierInfo, createdAt, templateIndex]);
 
   const cycleTemplate = () => {
-    setTemplateIndex((prev) => (prev + 1) % CARD_TEMPLATES.length);
+    setTemplateIndex((prev) => (prev + 1) % templates.length);
   };
 
   const cardProps: ResultCardProps = {
@@ -87,6 +98,9 @@ export default function ResultCardGenerator({
     tierInfo,
     createdAt,
     templateIndex,
+    watermarkText,
+    quotes,
+    templates
   };
 
   return (
@@ -121,7 +135,7 @@ export default function ResultCardGenerator({
           }}
           aria-label="Ganti template kartu"
         >
-          🎨 {CARD_TEMPLATES[templateIndex].name}
+          🎨 {templates[templateIndex].name}
         </button>
 
         <div

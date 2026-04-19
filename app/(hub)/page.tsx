@@ -60,20 +60,33 @@ export default function HubPage() {
           🎮 Seberapa Kamu?
         </span>
 
-        {/* Breadcrumb / location indicator */}
-        <span
-          aria-label="Kamu sedang di: Hub"
-          style={{
-            fontSize: "0.75rem",
-            color: "var(--hub-text-muted)",
-            background: "var(--hub-bg-card)",
-            border: "1px solid var(--hub-border)",
-            borderRadius: "999px",
-            padding: "0.25rem 0.75rem",
-          }}
-        >
-          🏠 Hub
-        </span>
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <a
+            href="/blog"
+            style={{
+              fontSize: "0.85rem",
+              color: "var(--hub-text)",
+              textDecoration: "none",
+              fontWeight: 800,
+            }}
+          >
+            ✍️ Blog
+          </a>
+          {/* Breadcrumb / location indicator */}
+          <span
+            aria-label="Kamu sedang di: Hub"
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--hub-text-muted)",
+              background: "var(--hub-bg-card)",
+              border: "1px solid var(--hub-border)",
+              borderRadius: "999px",
+              padding: "0.25rem 0.75rem",
+            }}
+          >
+            🏠 Hub
+          </span>
+        </div>
       </header>
 
       {/* Main content */}
