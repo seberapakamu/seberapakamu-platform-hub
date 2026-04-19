@@ -106,7 +106,7 @@ export default function ResultPageClient({ hash }: ResultPageClientProps) {
           .select("id, nama, asal_anime, image_url, crop_x, crop_y, crop_width, crop_height, kutipan, kekuatan, deskripsi, aktif")
           .in("id", characterIds);
 
-        const charMap = new Map((chars ?? []).map((c: AnimeCharacter) => [c.id, c]));
+        const charMap = new Map<number, AnimeCharacter>((chars ?? []).map((c: AnimeCharacter) => [c.id, c]));
         const rankData = TEBAK_RANKS.find((r) => r.rank === sessionData.tier) ?? TEBAK_RANKS[0];
 
         const sessionResult: TebakSessionResult = {
@@ -118,7 +118,7 @@ export default function ResultPageClient({ hash }: ResultPageClientProps) {
           best_streak: meta.best_streak,
           rank: rankData.rank,
           soal_results: meta.soal_summary.map((s) => ({
-            character: charMap.get(s.character_id) ?? {
+            character: (charMap.get(s.character_id) ?? {
               id: s.character_id,
               nama: "???",
               asal_anime: "???",
@@ -131,7 +131,7 @@ export default function ResultPageClient({ hash }: ResultPageClientProps) {
               kekuatan: "",
               deskripsi: "",
               aktif: false,
-            },
+            }) as AnimeCharacter,
             hints_used: s.hints_used,
             correct: s.correct,
             score: s.score,
