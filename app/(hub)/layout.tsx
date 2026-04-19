@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import "@/app/globals.css";
 
 const nunito = Nunito({
   variable: "--font-hub",
@@ -59,6 +60,17 @@ export default function HubLayout({
           --hub-text-bold: #FFFFFF;
           --hub-border: #2A2A45;
           --hub-border-glow: rgba(255, 255, 255, 0.1);
+
+          /* Standard tokens for shared components */
+          --color-bg: var(--hub-bg);
+          --color-surface: var(--hub-bg);
+          --color-surface-alt: var(--hub-bg-card);
+          --color-border: var(--hub-border);
+          --color-primary: #A0C4FF;
+          --color-accent: #FFDA6A;
+          --color-text: var(--hub-text);
+          --color-text-bold: var(--hub-text-bold);
+          --color-text-muted: var(--hub-text-muted);
         }
       `}</style>
       {children}

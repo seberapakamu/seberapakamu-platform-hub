@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
+import { PublicNavbar, PublicFooter } from "@/components/PublicNav";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +54,10 @@ export default async function HubBlogPage({
   const { data } = await query;
   const articles: Article[] = data ?? [];
 
+  const navLinks = [
+    { href: "/blog", label: "✍️ Blog" },
+  ];
+
   return (
     <div
       style={{
@@ -61,6 +66,7 @@ export default async function HubBlogPage({
         minHeight: "100vh",
         background: "var(--hub-bg)",
         color: "var(--hub-text)",
+        overflowX: "hidden", // Prevent horizontal shift
       }}
     >
       <style>{`
@@ -68,43 +74,17 @@ export default async function HubBlogPage({
           transform: translateY(-4px);
           border-color: var(--hub-text-muted) !important;
         }
+        *, *::before, *::after { box-sizing: border-box; }
       `}</style>
-      {/* Navbar Hub */}
-      <header
-        style={{
-          padding: "1.25rem 1rem",
-          borderBottom: "1px solid var(--hub-border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <Link
-          href="/"
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: 900,
-            color: "var(--hub-text-bold)",
-            letterSpacing: "-0.02em",
-            textDecoration: "none",
-          }}
-        >
-          🎮 Seberapa Kamu?
-        </Link>
-        <span
-          style={{
-            fontSize: "0.75rem",
-            color: "var(--hub-text-muted)",
-            background: "var(--hub-bg-card)",
-            border: "1px solid var(--hub-border)",
-            borderRadius: "999px",
-            padding: "0.25rem 0.75rem",
-          }}
-        >
-          ✍️ Blog
-        </span>
-      </header>
+      
+      <PublicNavbar
+        logoEmoji="🎮"
+        logoText="Seberapa Kamu?"
+        logoHref="/"
+        navLinks={navLinks}
+        quizHref="/"
+        quizText="Pilih Kuis ✨"
+      />
 
       <main style={{ flex: 1, maxWidth: "1100px", width: "100%", margin: "0 auto", padding: "3rem 1rem" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -216,9 +196,16 @@ export default async function HubBlogPage({
         )}
       </main>
 
-      <footer style={{ padding: "1.5rem", borderTop: "1px solid var(--hub-border)", textAlign: "center", color: "var(--hub-text-muted)", fontSize: "0.85rem" }}>
-        © {new Date().getFullYear()} Seberapa Kamu?
-      </footer>
+      <PublicFooter
+        logoEmoji="🎮"
+        logoText="Seberapa Kamu?"
+        footerLinks={[
+          { href: "/", label: "🏠 Hub" },
+          { href: "/blog", label: "✍️ Blog" },
+          { href: "/wibu", label: "🎌 Wibu" },
+          { href: "/bucin", label: "💖 Bucin" },
+        ]}
+      />
     </div>
   );
 }

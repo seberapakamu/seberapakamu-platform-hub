@@ -69,13 +69,15 @@ export function PublicNavbar({
 
           {/* Desktop nav */}
           <div className="hidden sm:flex items-center gap-4 text-sm font-semibold">
-            <Link
-              href="/"
-              className="transition-opacity hover:opacity-70"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              ← Hub
-            </Link>
+            {pathname !== "/" && (
+              <Link
+                href="/"
+                className="transition-opacity hover:opacity-70"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                ← Hub
+              </Link>
+            )}
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
@@ -171,16 +173,18 @@ export function PublicNavbar({
 
         {/* Sidebar links */}
         <nav className="flex flex-col gap-1 px-3 py-4 flex-1">
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-colors"
-            style={{
-              backgroundColor: "transparent",
-              color: "var(--color-text-muted)",
-            }}
-          >
-            ← Kembali ke Hub
-          </Link>
+          {pathname !== "/" && (
+            <Link
+              href="/"
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-colors"
+              style={{
+                backgroundColor: "transparent",
+                color: "var(--color-text-muted)",
+              }}
+            >
+              ← Kembali ke Hub
+            </Link>
+          )}
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}

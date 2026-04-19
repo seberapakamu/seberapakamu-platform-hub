@@ -1,12 +1,32 @@
 import ModuleCard from "@/components/hub/ModuleCard";
 import ComingSoonCard from "@/components/hub/ComingSoonCard";
 import { MODULES } from "@/lib/hub/modules";
+import { PublicNavbar, PublicFooter } from "@/components/PublicNav";
+import { createClient } from "@supabase/supabase-js";
+import Link from "next/link";
 
-export const dynamic = "force-static";
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-export default function HubPage() {
+export const dynamic = "force-dynamic";
+
+export default async function HubPage() {
   const activeModules = MODULES.filter((m) => m.status === "active");
   const comingSoonModules = MODULES.filter((m) => m.status === "coming_soon");
+
+  // Fetch latest blogs
+  const { data: latestArticles } = await supabase
+    .from("articles")
+    .select("id, judul, slug, gambar_url, updated_at, module_slug")
+    .eq("status", "published")
+    .order("updated_at", { ascending: false })
+    .limit(3);
+
+  const navLinks = [
+    { href: "/blog", label: "✍️ Blog" },
+  ];
 
   return (
     <div
@@ -25,69 +45,27 @@ export default function HubPage() {
           gap: 1.5rem;
         }
         @media (min-width: 640px) {
-          .hub-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
+          .hub-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (min-width: 1024px) {
-          .hub-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
+          .hub-grid { grid-template-columns: repeat(3, 1fr); }
         }
         .saweria-btn:hover { opacity: 0.85; }
+        .blog-card-hub:hover {
+          transform: translateY(-4px);
+          border-color: var(--hub-text-muted) !important;
+        }
         *, *::before, *::after { box-sizing: border-box; }
       `}</style>
 
-      {/* Navbar */}
-      <header
-        style={{
-          padding: "1.25rem 1rem",
-          borderBottom: "1px solid var(--hub-border)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <span
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: 900,
-            color: "var(--hub-text-bold)",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          🎮 Seberapa Kamu?
-        </span>
-
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <a
-            href="/blog"
-            style={{
-              fontSize: "0.85rem",
-              color: "var(--hub-text)",
-              textDecoration: "none",
-              fontWeight: 800,
-            }}
-          >
-            ✍️ Blog
-          </a>
-          {/* Breadcrumb / location indicator */}
-          <span
-            aria-label="Kamu sedang di: Hub"
-            style={{
-              fontSize: "0.75rem",
-              color: "var(--hub-text-muted)",
-              background: "var(--hub-bg-card)",
-              border: "1px solid var(--hub-border)",
-              borderRadius: "999px",
-              padding: "0.25rem 0.75rem",
-            }}
-          >
-            🏠 Hub
-          </span>
-        </div>
-      </header>
+      <PublicNavbar
+        logoEmoji="🎮"
+        logoText="Seberapa Kamu?"
+        logoHref="/"
+        navLinks={navLinks}
+        quizHref="/"
+        quizText="Pilih Kuis ✨"
+      />
 
       {/* Main content */}
       <main
@@ -133,7 +111,7 @@ export default function HubPage() {
         </section>
 
         {/* Module Grid */}
-        <section aria-label="Daftar modul kuis">
+        <section aria-label="Daftar modul kuis" style={{ marginBottom: "5rem" }}>
           <div className="hub-grid">
             {activeModules.map((module) => (
               <ModuleCard key={module.id} module={module} />
@@ -143,45 +121,68 @@ export default function HubPage() {
             ))}
           </div>
         </section>
+
+        {/* Blog Section */}
+        {latestArticles && latestArticles.length > 0 && (
+          <section style={{ marginBottom: "4rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
+              <h2 style={{ fontSize: "1.5rem", fontWeight: 900, color: "var(--hub-text-bold)" }}>✍️ Blog Terbaru</h2>
+              <Link href="/blog" style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--color-primary)", textDecoration: "none" }}>
+                Lihat Semua →
+              </Link>
+            </div>
+            <div className="hub-grid">
+              {latestArticles.map((article) => (
+                <Link
+                  key={article.id}
+                  href={`/blog/${article.slug}`}
+                  className="blog-card-hub"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "var(--hub-bg-card)",
+                    border: "1px solid var(--hub-border)",
+                    borderRadius: "1.5rem",
+                    overflow: "hidden",
+                    textDecoration: "none",
+                    color: "inherit",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  <div style={{ height: "160px", background: "var(--hub-border)", position: "relative" }}>
+                    {article.gambar_url && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={article.gambar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    )}
+                    <span style={{ position: "absolute", top: "1rem", left: "1rem", fontSize: "0.65rem", background: "rgba(0,0,0,0.5)", padding: "0.25rem 0.5rem", borderRadius: "0.5rem", color: "#fff", backdropFilter: "blur(4px)", fontWeight: 800, textTransform: "uppercase" }}>
+                      {article.module_slug || "Umum"}
+                    </span>
+                  </div>
+                  <div style={{ padding: "1.25rem" }}>
+                    <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--hub-text-bold)", lineHeight: 1.4, marginBottom: "0.5rem" }}>
+                      {article.judul}
+                    </h3>
+                    <p style={{ fontSize: "0.8rem", color: "var(--hub-text-muted)" }}>
+                      {new Date(article.updated_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
-      {/* Footer */}
-      <footer
-        style={{
-          padding: "1.5rem 2rem",
-          borderTop: "1px solid var(--hub-border)",
-          textAlign: "center",
-          color: "var(--hub-text-muted)",
-          fontSize: "0.8rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "0.75rem",
-        }}
-      >
-        <a
-          className="saweria-btn"
-          href="https://saweria.co/seberapakamu"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.4rem",
-            padding: "0.5rem 1.25rem",
-            borderRadius: "999px",
-            background: "#FFDA6A",
-            color: "#7A4F00",
-            fontWeight: 800,
-            fontSize: "0.85rem",
-            textDecoration: "none",
-            transition: "opacity 0.15s",
-          }}
-        >
-          ☕ Seberapa dermawan kamu?
-        </a>
-        <span>© {new Date().getFullYear()} Seberapa Kamu? — All rights reserved.</span>
-      </footer>
+      <PublicFooter
+        logoEmoji="🎮"
+        logoText="Seberapa Kamu?"
+        footerLinks={[
+          { href: "/", label: "🏠 Hub" },
+          { href: "/blog", label: "✍️ Blog" },
+          { href: "/wibu", label: "🎌 Wibu" },
+          { href: "/bucin", label: "💖 Bucin" },
+        ]}
+      />
     </div>
   );
 }
