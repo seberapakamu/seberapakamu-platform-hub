@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import type { TebakSessionResult } from "@/lib/types/tebak";
+import type { TebakSessionResult, AnimeCharacter } from "@/lib/types/tebak";
 import { TEBAK_RANKS } from "@/lib/tebakScoring";
 import { createBrowserClient } from "@/lib/supabase";
 import TebakResultCard from "@/components/TebakResultCard";
@@ -106,7 +106,7 @@ export default function ResultPageClient({ hash }: ResultPageClientProps) {
           .select("id, nama, asal_anime, image_url, crop_x, crop_y, crop_width, crop_height, kutipan, kekuatan, deskripsi, aktif")
           .in("id", characterIds);
 
-        const charMap = new Map((chars ?? []).map((c) => [c.id, c]));
+        const charMap = new Map((chars ?? []).map((c: AnimeCharacter) => [c.id, c]));
         const rankData = TEBAK_RANKS.find((r) => r.rank === sessionData.tier) ?? TEBAK_RANKS[0];
 
         const sessionResult: TebakSessionResult = {
