@@ -9,13 +9,14 @@ const STORAGE_KEY = "wibu_supabase_session_id";
  */
 export async function recordSessionStarted(
   username: string,
-  hash: string
+  hash: string,
+  quizType: string = "purity-test"
 ): Promise<string | null> {
   try {
     const supabase = createBrowserClient();
     const { data, error } = await supabase
       .from("sessions")
-      .insert({ username, hash })
+      .insert({ username, hash, quiz_type: quizType })
       .select("id")
       .single();
 
@@ -75,6 +76,7 @@ export async function saveCompletedSession(params: {
   startedAt: string;
   finishedAt: string;
   durationSeconds: number;
+  quizType?: string;
 }): Promise<string | null> {
   try {
     const supabase = createBrowserClient();
@@ -88,6 +90,7 @@ export async function saveCompletedSession(params: {
         started_at: params.startedAt,
         finished_at: params.finishedAt,
         duration_seconds: params.durationSeconds,
+        quiz_type: params.quizType || "purity-test",
         share_clicked: false,
       })
       .select("id")

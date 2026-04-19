@@ -31,16 +31,6 @@ const nextConfig: NextConfig = {
         destination: "/wibu/tentang-wibu",
         permanent: true,
       },
-      {
-        source: "/blog",
-        destination: "/wibu/blog",
-        permanent: true,
-      },
-      {
-        source: "/blog/:slug",
-        destination: "/wibu/blog/:slug",
-        permanent: true,
-      },
       // Redirect URL admin lama → prefix /admin/wibu/
       {
         source: "/admin/dashboard",

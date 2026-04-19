@@ -448,7 +448,7 @@ export default function AdminContentPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/articles");
+      const res = await fetch("/api/admin/articles?module=wibu");
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Gagal memuat artikel");
       setArticles(json.data ?? []);
@@ -493,6 +493,7 @@ export default function AdminContentPage() {
         konten: form.konten,
         status: form.status,
         gambar_url: form.gambar_url.trim() || null,
+        module_slug: "wibu",
       };
 
       const url = editingArticle

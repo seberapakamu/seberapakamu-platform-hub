@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 const NAV_LINKS = [
   { href: "/wibu/wiki", label: "📖 Wiki" },
   { href: "/wibu/tentang-wibu", label: "ℹ️ Tentang" },
-  { href: "/wibu/blog", label: "✍️ Blog" },
+  { href: "/blog?module=wibu", label: "✍️ Blog" },
 ];
 
 const FOOTER_LINKS = [
@@ -15,11 +15,32 @@ const FOOTER_LINKS = [
   { href: "/wibu", label: "🎌 Beranda Wibu" },
   { href: "/wibu/wiki", label: "📖 Wiki" },
   { href: "/wibu/tentang-wibu", label: "ℹ️ Tentang" },
-  { href: "/wibu/blog", label: "✍️ Blog" },
+  { href: "/blog?module=wibu", label: "✍️ Blog" },
   { href: "/wibu/username", label: "🎮 Mulai Kuis" },
 ];
 
-export function PublicNavbar() {
+export interface NavLink {
+  href: string;
+  label: string;
+}
+
+export interface PublicNavbarProps {
+  logoEmoji?: string;
+  logoText?: string;
+  logoHref?: string;
+  navLinks?: NavLink[];
+  quizHref?: string;
+  quizText?: string;
+}
+
+export function PublicNavbar({
+  logoEmoji = "🌸",
+  logoText = "WibuQuiz",
+  logoHref = "/wibu",
+  navLinks = NAV_LINKS,
+  quizHref = "/wibu/username",
+  quizText = "Mulai Kuis ✨",
+}: PublicNavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -42,8 +63,8 @@ export function PublicNavbar() {
       >
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/wibu" className="text-xl font-black" style={{ color: "var(--color-primary)" }}>
-            🌸 WibuQuiz
+          <Link href={logoHref} className="text-xl font-black" style={{ color: "var(--color-primary)" }}>
+            {logoEmoji} {logoText}
           </Link>
 
           {/* Desktop nav */}
@@ -55,7 +76,7 @@ export function PublicNavbar() {
             >
               ← Hub
             </Link>
-            {NAV_LINKS.map(({ href, label }) => (
+            {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
@@ -66,11 +87,11 @@ export function PublicNavbar() {
               </Link>
             ))}
             <Link
-              href="/wibu/username"
+              href={quizHref}
               className="px-4 py-2 rounded-full font-bold text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: "var(--color-primary)" }}
             >
-              Mulai Kuis ✨
+              {quizText}
             </Link>
           </div>
 
@@ -136,7 +157,7 @@ export function PublicNavbar() {
           style={{ borderBottom: "1px solid var(--color-border)" }}
         >
           <span className="text-lg font-black" style={{ color: "var(--color-primary)" }}>
-            🌸 WibuQuiz
+            {logoEmoji} {logoText}
           </span>
           <button
             onClick={() => setOpen(false)}
@@ -160,7 +181,7 @@ export function PublicNavbar() {
           >
             ← Kembali ke Hub
           </Link>
-          {NAV_LINKS.map(({ href, label }) => (
+          {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
@@ -178,11 +199,11 @@ export function PublicNavbar() {
         {/* Sidebar CTA */}
         <div className="px-4 pb-8">
           <Link
-            href="/wibu/username"
+            href={quizHref}
             className="block w-full text-center py-3 rounded-2xl font-black text-sm text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: "var(--color-primary)" }}
           >
-            🚀 Mulai Kuis Sekarang
+            🚀 {quizText}
           </Link>
         </div>
       </div>
@@ -190,22 +211,32 @@ export function PublicNavbar() {
   );
 }
 
-export function PublicFooter() {
+export interface PublicFooterProps {
+  logoEmoji?: string;
+  logoText?: string;
+  footerLinks?: NavLink[];
+}
+
+export function PublicFooter({
+  logoEmoji = "🌸",
+  logoText = "WibuQuiz",
+  footerLinks = FOOTER_LINKS,
+}: PublicFooterProps) {
   return (
     <footer
       className="py-6 px-4 text-center text-sm"
       style={{ backgroundColor: "var(--color-surface)", borderTop: "1px solid var(--color-border)", color: "var(--color-text-muted)" }}
     >
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="font-bold" style={{ color: "var(--color-primary)" }}>🌸 WibuQuiz</p>
+        <p className="font-bold" style={{ color: "var(--color-primary)" }}>{logoEmoji} {logoText}</p>
         <div className="flex flex-wrap justify-center gap-4">
-          {FOOTER_LINKS.map(({ href, label }) => (
+          {footerLinks.map(({ href, label }) => (
             <Link key={href} href={href} className="hover:opacity-80 transition-opacity">
               {label}
             </Link>
           ))}
         </div>
-        <p>© 2026 WibuQuiz. Made with 💖</p>
+        <p>© {new Date().getFullYear()} {logoText}. Made with 💖</p>
       </div>
     </footer>
   );

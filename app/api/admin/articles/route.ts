@@ -39,14 +39,20 @@ async function getAuthenticatedUser() {
 }
 
 // GET /api/admin/articles — list articles
-// Authenticated admins see all; unauthenticated see published only (via RLS)
-export async function GET() {
+// Supports ?module=wibu|bucin to filter by module_slug
+export async function GET(request: Request) {
   const user = await getAuthenticatedUser();
   const supabase = await createServerClient();
+  const { searchParams } = new URL(request.url);
+  const moduleSlug = searchParams.get("module");
 
-  const query = user
+  let query = user
     ? supabase.from("articles").select("*").order("id", { ascending: true })
     : supabase.from("articles").select("*").eq("status", "published").order("id", { ascending: true });
+
+  if (moduleSlug) {
+    query = query.eq("module_slug", moduleSlug);
+  }
 
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -77,6 +83,7 @@ export async function POST(request: Request) {
       konten: body.konten!.trim(),
       status: body.status!,
       gambar_url: body.gambar_url ?? null,
+      module_slug: (body as Record<string, unknown>).module_slug ?? null,
     })
     .select()
     .single();

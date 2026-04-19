@@ -364,11 +364,11 @@ function TimerConfig() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/questions")
+    fetch("/api/admin/questions?module=wibu")
       .then(() => {})
       .catch(() => {});
     // Load config from Supabase via a simple fetch
-    fetch("/api/admin/config")
+    fetch("/api/admin/config?module=wibu")
       .then((r) => r.json())
       .then((json) => {
         if (json.data) {
@@ -388,7 +388,7 @@ function TimerConfig() {
     await fetch("/api/admin/config", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ timer_enabled: String(enabled), timer_duration_minutes: duration }),
+      body: JSON.stringify({ timer_enabled: String(enabled), timer_duration_minutes: duration, _module_slug: "wibu" }),
     });
     setSaving(false);
     setSaved(true);
@@ -483,7 +483,7 @@ export default function AdminQuestionsPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/questions");
+      const res = await fetch("/api/admin/questions?module=wibu");
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Gagal memuat soal");
       setQuestions(json.data ?? []);
@@ -527,6 +527,7 @@ export default function AdminQuestionsPage() {
         bobot: parseFloat(form.bobot),
         opsi_jawaban: form.opsi_jawaban,
         aktif: form.aktif,
+        module_slug: "wibu",
       };
 
       const url = editingQuestion

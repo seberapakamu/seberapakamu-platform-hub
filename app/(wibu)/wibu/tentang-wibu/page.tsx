@@ -52,6 +52,7 @@ async function getTentangContent() {
     const { data } = await supabase
       .from("site_content")
       .select("key, value")
+      .eq("module_slug", "wibu")
       .in("key", ["tentang_intro", "tentang_tiers", "tentang_platform_faqs"]);
     const get = (key: string) => data?.find((r) => r.key === key)?.value;
     return {

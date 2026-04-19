@@ -12,6 +12,9 @@ export interface ResultCardProps {
   createdAt: string;
   /** Template index (0-2). If omitted, one is chosen randomly at render time. */
   templateIndex?: number;
+  watermarkText?: string;
+  quotes?: string[];
+  templates?: CardTemplate[];
 }
 
 // ─── Templates ────────────────────────────────────────────────────────────────
@@ -59,21 +62,11 @@ export const CARD_TEMPLATES: CardTemplate[] = [
 
 // ─── Quotes ───────────────────────────────────────────────────────────────────
 
-const HUMORIS_QUOTES: string[] = [
-  "\"Anime bukan pelarian — ini adalah destinasi.\" — Sun Tzu (mungkin)",
-  "\"Satu episode lagi\" — kata-kata terakhir sebelum subuh.",
-  "\"Aku tidak kecanduan anime. Aku hanya sangat berdedikasi.\"",
-  "\"Waifu > Kehidupan nyata. Ini bukan opini, ini matematika.\"",
-  "\"Tidur itu penting, tapi ending arc ini lebih penting.\"",
-  "\"Orang bilang aku perlu keluar. Aku sudah keluar — ke dunia isekai.\"",
-  "\"Crunchyroll adalah investasi jangka panjang.\"",
-  "\"Bahasa Jepang? Aku belajar sendiri dari subtitle.\"",
-  "\"Figurin itu bukan mainan. Itu seni. Itu warisan budaya.\"",
-  "\"Kalau anime salah, aku tidak mau benar.\"",
-];
+import { WIBU_QUOTES } from "@/lib/drawResultCard";
 
-function getRandomQuote(seed: number): string {
-  return HUMORIS_QUOTES[seed % HUMORIS_QUOTES.length];
+function getRandomQuote(seed: number, customQuotes?: string[]): string {
+  const quoteList = customQuotes ?? WIBU_QUOTES;
+  return quoteList[seed % quoteList.length];
 }
 
 function getRandomTemplateIndex(seed: number): number {
@@ -87,12 +80,13 @@ function getRandomTemplateIndex(seed: number): number {
  * Use `forwardRef` so the parent can pass a ref to html2canvas.
  */
 const ResultCard = forwardRef<HTMLDivElement, ResultCardProps>(
-  ({ username, score, tierInfo, createdAt, templateIndex }, ref) => {
+  ({ username, score, tierInfo, createdAt, templateIndex, watermarkText, quotes, templates }, ref) => {
+    const activeTemplates = templates ?? CARD_TEMPLATES;
     // Deterministic "random" based on username + score so SSR/CSR match
     const seed = username.length + Math.round(score);
-    const tplIdx = templateIndex ?? getRandomTemplateIndex(seed);
-    const template = CARD_TEMPLATES[tplIdx];
-    const quote = getRandomQuote(seed + tplIdx);
+    const tplIdx = templateIndex ?? (seed % activeTemplates.length);
+    const template = activeTemplates[tplIdx];
+    const quote = getRandomQuote(seed + tplIdx, quotes);
 
     const formattedDate = new Date(createdAt).toLocaleDateString("id-ID", {
       day: "numeric",
@@ -271,7 +265,7 @@ const ResultCard = forwardRef<HTMLDivElement, ResultCardProps>(
           }}
           data-testid="card-watermark"
         >
-          🌸 SeberapaWibu.id
+          {watermarkText ?? "🌸 SeberapaKamu.id"}
         </div>
         <div
           style={{

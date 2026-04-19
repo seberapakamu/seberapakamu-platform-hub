@@ -129,7 +129,7 @@ function TiersTab({ onToast }: { onToast: (msg: string, type: "success" | "error
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/site-content?keys=tier_1,tier_2,tier_3,tier_4,tier_5")
+    fetch("/api/admin/site-content?keys=tier_1,tier_2,tier_3,tier_4,tier_5&module=wibu")
       .then((r) => r.json())
       .then(({ data }) => {
         if (!data) return;
@@ -149,7 +149,7 @@ function TiersTab({ onToast }: { onToast: (msg: string, type: "success" | "error
     setSaving(true);
     try {
       const body = tiers.map((t, i) => ({ key: `tier_${i + 1}`, value: t }));
-      const res = await fetch("/api/admin/site-content", {
+      const res = await fetch("/api/admin/site-content?module=wibu", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -264,7 +264,7 @@ function LandingTab({ onToast }: { onToast: (msg: string, type: "success" | "err
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/site-content?keys=landing_hero,landing_cta,landing_how_it_works,landing_quiz_list,landing_stats_offset")
+    fetch("/api/admin/site-content?keys=landing_hero,landing_cta,landing_how_it_works,landing_quiz_list,landing_stats_offset&module=wibu")
       .then((r) => r.json())
       .then(({ data }) => {
         if (!data) return;
@@ -295,7 +295,7 @@ function LandingTab({ onToast }: { onToast: (msg: string, type: "success" | "err
         { key: "landing_quiz_list", value: quizList },
         { key: "landing_stats_offset", value: { offset: statsOffset } },
       ];
-      const res = await fetch("/api/admin/site-content", {
+      const res = await fetch("/api/admin/site-content?module=wibu", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -436,7 +436,7 @@ function WikiTab({ onToast }: { onToast: (msg: string, type: "success" | "error"
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/site-content?keys=wiki_faqs,wiki_memes,wiki_timeline")
+    fetch("/api/admin/site-content?keys=wiki_faqs,wiki_memes,wiki_timeline&module=wibu")
       .then((r) => r.json())
       .then(({ data }) => {
         if (!data) return;
@@ -455,7 +455,7 @@ function WikiTab({ onToast }: { onToast: (msg: string, type: "success" | "error"
         { key: "wiki_memes", value: memes },
         { key: "wiki_timeline", value: timeline },
       ];
-      const res = await fetch("/api/admin/site-content", {
+      const res = await fetch("/api/admin/site-content?module=wibu", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -595,7 +595,7 @@ function TentangTab({ onToast }: { onToast: (msg: string, type: "success" | "err
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/site-content?keys=tentang_intro,tentang_tiers,tentang_platform_faqs")
+    fetch("/api/admin/site-content?keys=tentang_intro,tentang_tiers,tentang_platform_faqs&module=wibu")
       .then((r) => r.json())
       .then(({ data }) => {
         if (!data) return;
@@ -614,7 +614,7 @@ function TentangTab({ onToast }: { onToast: (msg: string, type: "success" | "err
         { key: "tentang_tiers", value: tiers },
         { key: "tentang_platform_faqs", value: faqs },
       ];
-      const res = await fetch("/api/admin/site-content", {
+      const res = await fetch("/api/admin/site-content?module=wibu", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
