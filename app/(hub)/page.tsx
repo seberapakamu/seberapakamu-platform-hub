@@ -116,6 +116,39 @@ export default async function HubPage() {
             {activeModules.map((module) => (
               <ModuleCard key={module.id} module={module} />
             ))}
+            
+            {/* Saweria Card */}
+            <a
+              href="https://saweria.co/seberapakamu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="saweria-btn"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                background: "linear-gradient(135deg, #faae2b, #f18c06)",
+                borderRadius: "2rem",
+                padding: "2rem",
+                textDecoration: "none",
+                color: "#fff",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: "0 10px 25px -5px rgba(241, 140, 6, 0.4)",
+                position: "relative",
+                overflow: "hidden",
+                border: "4px solid rgba(255,255,255,0.2)"
+              }}
+            >
+              <div style={{ position: "absolute", top: "-10px", right: "-10px", fontSize: "5rem", opacity: 0.1, transform: "rotate(15deg)" }}>💰</div>
+              <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>☕</div>
+              <div style={{ flex: 1 }}>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.5rem", lineHeight: 1.2 }}>Seberapa dermawan kamu? 💰</h2>
+                <p style={{ fontSize: "0.9rem", opacity: 0.9, fontWeight: 600 }}>Dukung pengembangan platform ini dengan traktir kopi developer! ✨</p>
+              </div>
+              <div style={{ marginTop: "1.5rem", background: "#fff", color: "#f18c06", padding: "0.75rem 1.25rem", borderRadius: "1rem", fontWeight: 900, textAlign: "center", fontSize: "0.9rem" }}>
+                Donasi di Saweria →
+              </div>
+            </a>
+
             {comingSoonModules.map((module) => (
               <ComingSoonCard key={module.id} module={module} />
             ))}

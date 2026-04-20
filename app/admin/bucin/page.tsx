@@ -7,6 +7,7 @@ import { BUCIN_TIERS } from "@/lib/bucin-scoring";
 
 const NAV_LINKS = [
   { href: "/admin/bucin/questions", label: "📝 Pertanyaan", desc: "Kelola soal kuis Bucin Purity Test" },
+  { href: "/admin/bucin/couple-sync", label: "👩‍❤️‍👨 Couple Sync", desc: "Kelola soal kuis sinkronisasi pasangan" },
   { href: "/admin/bucin/content", label: "📚 Konten Blog", desc: "Kelola artikel blog" },
   { href: "/admin/bucin/site-content", label: "✏️ Edit Halaman", desc: "Edit konten landing, wiki, tier" },
 ];
