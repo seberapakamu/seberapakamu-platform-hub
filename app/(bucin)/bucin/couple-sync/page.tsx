@@ -43,8 +43,10 @@ export default function CoupleSyncEntryPage() {
       return;
     }
 
+    // Save creator status to prevent self-joining on same device
+    localStorage.setItem(`couple_room_${roomCode}`, 'creator');
+
     // Save user index to local storage/session if needed, or just pass it in URL/state
-    // We'll use a search param or similar to identify user1 vs user2
     router.push(`/bucin/couple-sync/room/${roomCode}?u=1&name=${encodeURIComponent(name)}`);
   };
 
@@ -53,17 +55,32 @@ export default function CoupleSyncEntryPage() {
       setError("Isi nama dan kode room ya!");
       return;
     }
+    
+    const cleanCode = code.toUpperCase();
+    
+    // Check if this device is the creator
+    if (localStorage.getItem(`couple_room_${cleanCode}`) === 'creator') {
+      setError("Gunakan perangkat pasanganmu untuk join ya! Jangan main sendiri 😂");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     const { data: room, error: roomError } = await supabase
       .from("couple_rooms")
       .select("*")
-      .eq("code", code.toUpperCase())
+      .eq("code", cleanCode)
       .single();
 
     if (roomError || !room) {
       setError("Room tidak ditemukan. Cek lagi kodenya.");
+      setLoading(false);
+      return;
+    }
+
+    if (room.user1_name === name) {
+      setError("Nama ini sudah digunakan oleh pembuat room!");
       setLoading(false);
       return;
     }
