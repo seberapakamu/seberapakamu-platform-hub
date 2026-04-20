@@ -33,26 +33,48 @@ const DEFAULT_HOW_IT_WORKS = [
 async function getLandingContent() {
   try {
     const supabase = await createServerClient();
+    
+    // Fetch counts
+    const { count: totalSessions } = await supabase
+      .from("sessions")
+      .select("*", { count: "exact", head: true })
+      .eq("quiz_type", "bucin-purity-test");
+      
+    const { count: totalCouples } = await supabase
+      .from("couple_rooms")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "finished");
+
     const { data } = await supabase
       .from("site_content")
       .select("key, value")
       .eq("module_slug", "bucin")
-      .in("key", ["landing_hero", "landing_cta", "landing_how_it_works"]);
+      .in("key", ["landing_hero", "landing_cta", "landing_how_it_works", "landing_stats_offset"]);
     
     const get = (key: string) => data?.find((r) => r.key === key)?.value;
+    const offset = (get("landing_stats_offset") as { offset: number })?.offset ?? 1200;
     
     return {
       hero: (get("landing_hero") as typeof DEFAULT_HERO) ?? DEFAULT_HERO,
       cta: (get("landing_cta") as typeof DEFAULT_CTA) ?? DEFAULT_CTA,
       howItWorks: (get("landing_how_it_works") as typeof DEFAULT_HOW_IT_WORKS) ?? DEFAULT_HOW_IT_WORKS,
+      stats: {
+        individual: (totalSessions ?? 0) + Math.floor(offset * 0.7),
+        couples: (totalCouples ?? 0) + Math.floor(offset * 0.3),
+      }
     };
   } catch {
-    return { hero: DEFAULT_HERO, cta: DEFAULT_CTA, howItWorks: DEFAULT_HOW_IT_WORKS };
+    return { 
+      hero: DEFAULT_HERO, 
+      cta: DEFAULT_CTA, 
+      howItWorks: DEFAULT_HOW_IT_WORKS,
+      stats: { individual: 1200, couples: 450 }
+    };
   }
 }
 
 export default async function BucinHomePage() {
-  const { hero, cta, howItWorks } = await getLandingContent();
+  const { hero, cta, howItWorks, stats } = await getLandingContent();
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
@@ -61,7 +83,6 @@ export default async function BucinHomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-16 px-4 text-center">
-          {/* Decorative blobs */}
           <div
             className="absolute -top-20 -left-20 w-72 h-72 rounded-full opacity-30 blur-3xl pointer-events-none"
             style={{ backgroundColor: "var(--color-primary)" }}
@@ -74,7 +95,6 @@ export default async function BucinHomePage() {
           />
 
           <div className="relative max-w-3xl mx-auto">
-            {/* Heartbeat Animation */}
             <div className="text-6xl mb-4 animate-pulse" aria-hidden="true">💖</div>
             <h1
               className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight mb-4"
@@ -89,13 +109,13 @@ export default async function BucinHomePage() {
               {hero.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <Link
-                href="/bucin/username"
+              <a
+                href="#pilih-kuis"
                 className="px-8 py-4 rounded-full text-lg font-black text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
                 style={{ backgroundColor: "var(--color-primary)" }}
               >
-                {hero.ctaPrimary}
-              </Link>
+                🚀 Mulai Sekarang
+              </a>
               <Link
                 href="/bucin/wiki"
                 className="px-8 py-4 rounded-full text-lg font-bold transition-colors hover:opacity-80"
@@ -107,8 +127,85 @@ export default async function BucinHomePage() {
           </div>
         </section>
 
+        {/* Stats Section */}
+        <section className="py-12 px-4" style={{ backgroundColor: "var(--color-surface-alt)" }}>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-center text-2xl font-black mb-8" style={{ color: "var(--color-text-bold)" }}>
+              Sudah Banyak Yang Tes! 🎉
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-pink-50">
+                <div className="text-4xl mb-3">👤</div>
+                <div className="text-4xl font-black mb-1" style={{ color: "var(--color-primary)" }}>
+                  {stats.individual.toLocaleString('id-ID')}
+                </div>
+                <div className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                  Peserta Individual
+                </div>
+              </div>
+              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-pink-50">
+                <div className="text-4xl mb-3">👩‍❤️‍👨</div>
+                <div className="text-4xl font-black mb-1" style={{ color: "var(--color-accent)" }}>
+                  {stats.couples.toLocaleString('id-ID')}
+                </div>
+                <div className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                  Pasangan Sinkron
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Quiz Selection Section */}
+        <section id="pilih-kuis" className="py-16 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-black text-center mb-4" style={{ color: "var(--color-text-bold)" }}>
+              Pilih Mode Kuis 🎮
+            </h2>
+            <p className="text-center text-gray-500 mb-12">Pilih mode yang paling cocok buat kamu saat ini!</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Individual Card */}
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-gray-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                <div className="text-5xl mb-6">🙆‍♂️</div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-black mb-3" style={{ color: "var(--color-text-bold)" }}>Individual Purity Test</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Uji tingkat kebucinan dirimu sendiri. Jawab 60 pertanyaan jujur dan lihat di level mana kamu berada!
+                  </p>
+                </div>
+                <Link
+                  href="/bucin/username"
+                  className="w-full py-4 bg-pink-500 text-white rounded-2xl font-black text-center shadow-lg hover:bg-pink-600 transition-colors"
+                >
+                  Mulai Kuis Sendiri →
+                </Link>
+              </div>
+
+              {/* Couple Card */}
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-pink-100 flex flex-col hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden">
+                <div className="absolute top-0 right-0 px-4 py-1 bg-pink-500 text-white text-[10px] font-black uppercase tracking-widest rounded-bl-xl">New Feature</div>
+                <div className="text-5xl mb-6">👩‍❤️‍👨</div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-black mb-3" style={{ color: "var(--color-text-bold)" }}>Couple Sync Test</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Ajak pasanganmu join dalam room yang sama secara real-time. Buktikan seberapa kompak dan satu frekuensi kalian!
+                  </p>
+                </div>
+                <Link
+                  href="/bucin/couple-sync"
+                  className="w-full py-4 bg-accent text-white rounded-2xl font-black text-center shadow-lg hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: "var(--color-accent)" }}
+                >
+                  Main Bareng Pasangan →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* How It Works Section */}
-        <section className="py-16 px-4">
+        <section className="py-16 px-4 bg-gray-50/50">
           <div className="max-w-4xl mx-auto">
             <h2
               className="text-3xl font-black text-center mb-12"
@@ -157,16 +254,16 @@ export default async function BucinHomePage() {
             <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">
               {cta.subtitle}
             </p>
-            <Link
-              href="/bucin/username"
+            <a
+              href="#pilih-kuis"
               className="inline-block px-8 py-4 rounded-full text-lg font-black transition-transform hover:scale-105 active:scale-95"
               style={{
                 backgroundColor: "var(--color-surface)",
                 color: "var(--color-primary-dark)",
               }}
             >
-              {cta.buttonText}
-            </Link>
+              Coba Sekarang!
+            </a>
           </div>
         </section>
       </main>
@@ -175,4 +272,3 @@ export default async function BucinHomePage() {
     </div>
   );
 }
-
