@@ -262,7 +262,7 @@ export default function CoupleSyncRoomPage() {
                 <div className="text-6xl mb-6">🔗</div>
                 <h2 className="text-2xl font-black mb-2">Bagikan Kode Room</h2>
                 <p className="mb-8 text-gray-500">Minta pasanganmu masuk pakai kode ini ya!</p>
-                <div className="text-4xl font-black tracking-[0.5em] p-6 bg-pink-50 border-2 border-dashed border-pink-200 rounded-2xl text-pink-600 mb-8 select-all">
+                <div className="text-2xl sm:text-4xl font-black tracking-[0.2em] sm:tracking-[0.5em] p-4 sm:p-6 bg-pink-50 border-2 border-dashed border-pink-200 rounded-2xl text-pink-600 mb-8 select-all">
                     {code}
                 </div>
                 <button 
